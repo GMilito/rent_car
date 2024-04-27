@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-
+////////linea 7 cambio prueba/////
 
 const AdmClientes = () => {
   const [clientes, setClientes] = useState([]);
