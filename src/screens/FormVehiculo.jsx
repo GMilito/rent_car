@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FormVehiculo = () => {
-  const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
+  const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'Disponible', idTransmision: ''});
   const [colores, setColores] = useState([])
   const [combustibles, setCombustibles] = useState([])
   const [transmisiones, setTransmisiones] = useState([])
@@ -77,10 +77,6 @@ const FormVehiculo = () => {
       return;
     }
 
-    if (!/^\d{10}$/.test(vehiculo.idVehiculo)) {
-      alert("La Identificación debe tener exactamente 10 dígitos y solo debe contener números");
-      return;
-    }
   
     // Definir una función auxiliar para insertar el cliente en una base de datos
     const insertarVehiculo = (url, vehiculoData) => {
@@ -106,30 +102,15 @@ const FormVehiculo = () => {
       idCombustible: vehiculo.idCombustible,
       año: vehiculo.año,
       idMarca: vehiculo.idMarca, 
-      estado: vehiculo.estado,
+      estado: 'Disponible',
       idTransmision: vehiculo.idTransmision,
     };
   
     // Primero intentar insertar en SQL Server
-    insertarVehiculo('http://127.0.0.1:3001/vehiculos-sql', datosVehiculo)
+    insertarVehiculo('http://127.0.0.1:3001/vehiculos', datosVehiculo)
       .then(data => {
         console.log('Vehiculo agregado en SQL Server:', data);
-        // Aquí capturamos el idCliente devuelto por el backend
-        const idVehiculo = data.idVehiculo;
-        console.log('ID del vehiculo agregado:', idVehiculo);
-  
-        // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
-        // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
-        // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosVehiculo.idVehiculo = idVehiculo;
-  
-        // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarVehiculo('http://127.0.0.1:3001/vehiculos-mysql', datosVehiculo);
-      })
-      .then(data => {
-        console.log('Vehiculo agregado en MySQL:', data);
-        alert('Vehiculo agregado con éxito en ambas bases de datos');
-     
+        alert('Vehiculo agregado con éxito');
         resetForm(); 
       })
       .catch(error => {
@@ -155,7 +136,7 @@ const resetForm = () => {
           <StyledLabel>Tipo Vehiculo:</StyledLabel>
           <StyledSelect
             name="idTipoVehiculo"
-            value={vehiculo.paisResidencia}
+            value={vehiculo.idTipoVehiculo}
             onChange={handleChange}
             required
           >
@@ -166,23 +147,31 @@ const resetForm = () => {
               ))}
           </StyledSelect>
           <StyledLabel>Color:</StyledLabel>
-          <StyledInput
-            type="text"
+          <StyledSelect
             name="idColor"
             value={vehiculo.idColor}
             onChange={handleChange}
-            placeholder="Color"
             required
-          />
+          >
+            <option value="">Seleccione un color</option>
+            {colores
+              .map((color) => (
+                <option value={color.idColor}>{color.nombreColor}</option>
+              ))}
+          </StyledSelect>
           <StyledLabel>Combustible:</StyledLabel>
-          <StyledInput
-            type="text"
+          <StyledSelect
             name="idCombustible"
             value={vehiculo.idCombustible}
             onChange={handleChange}
-            placeholder="Combustible"
             required
-          />
+          >
+            <option value="">Seleccione un combustible</option>
+            {combustibles
+              .map((tv) => (
+                <option value={tv.idCombustible}>{tv.nombreCombustible}</option>
+              ))}
+          </StyledSelect>
           <StyledLabel>Año:</StyledLabel>
           <StyledInput
             type="text"
@@ -193,32 +182,32 @@ const resetForm = () => {
             required
           />
           <StyledLabel>Marca:</StyledLabel>
-          <StyledInput
-            type="text"
+          <StyledSelect
             name="idMarca"
             value={vehiculo.idMarca}
             onChange={handleChange}
-            placeholder="Marca"
             required
-          />
-          <StyledLabel>Estado:</StyledLabel>
-          <StyledInput
-            type="text"
-            name="estado"
-            value={vehiculo.estado}
-            onChange={handleChange}
-            placeholder="estado"
-            required
-          />
+          >
+            <option value="">Seleccione una marca</option>
+            {marcas
+              .map((tv) => (
+                <option value={tv.idMarca}>{tv.nombreMarca}</option>
+              ))}
+          </StyledSelect>
+         
           <StyledLabel>Transmision:</StyledLabel>
-          <StyledInput
-            type="text"
+          <StyledSelect
             name="idTransmision"
             value={vehiculo.idTransmision}
             onChange={handleChange}
-            placeholder="Transmision"
             required
-          />
+          >
+            <option value="">Seleccione un tipo</option>
+            {transmisiones
+              .map((tv) => (
+                <option value={tv.idTransmision}>{tv.tipoTransmision}</option>
+              ))}
+          </StyledSelect>
 
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
