@@ -8,8 +8,8 @@ const links = [
     href : "/AdmClientes",
   },
   {
-    name : "Registrar cuenta a cliente",
-    href : "/RegCuenta",
+    name : "Administración de vehiculos",
+    href : "/AdmVehiculos",
   },
   {
     name : "Registrar tarjeta a cliente",

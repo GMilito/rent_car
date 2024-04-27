@@ -1,11 +1,67 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 const FormVehiculo = () => {
   const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
+  const [colores, setColores] = useState([])
+  const [combustibles, setCombustibles] = useState([])
+  const [transmisiones, setTransmisiones] = useState([])
+  const [marcas, setMarcas] = useState([])
+  const [tipoVehiculos, setTipoVehiculos] = useState([])
+
+  const cargarColores = () => {
+    fetch('http://127.0.0.1:3001/color')
+      .then(response => response.json())
+      .then(data => {
+        setColores(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarCombustible = () => {
+    fetch('http://127.0.0.1:3001/combustible')
+      .then(response => response.json())
+      .then(data => {
+        setCombustibles(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarTransmisiones = () => {
+    fetch('http://127.0.0.1:3001/transmision')
+      .then(response => response.json())
+      .then(data => {
+        setTransmisiones(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarMarcas = () => {
+    fetch('http://127.0.0.1:3001/marca')
+      .then(response => response.json())
+      .then(data => {
+        setMarcas(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarTipoVehiculo = () => {
+    fetch('http://127.0.0.1:3001/tipoVehiculo')
+      .then(response => response.json())
+      .then(data => {
+        setTipoVehiculos(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+
+
+  useEffect(() => {
+
+    cargarColores();
+    cargarCombustible();
+    cargarTransmisiones();
+    cargarMarcas();
+    cargarTipoVehiculo();
+  }, []);
 
 
 
@@ -95,25 +151,21 @@ const resetForm = () => {
       <h1>Crear Vehiculo</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-        <StyledLabel>idVehiculo:</StyledLabel>
-          <StyledInput
-            type="text"
-            name="idVehiculo"
-            value={vehiculo.idVehiculo}
+        
+          <StyledLabel>Tipo Vehiculo:</StyledLabel>
+          <StyledSelect
+            name="idTipoVehiculo"
+            value={vehiculo.paisResidencia}
             onChange={handleChange}
-            placeholder="idVehiculo"
             required
-          />
-          <StyledLabel>id Tipo Vehiculo:</StyledLabel>
-          <StyledInput
-            type="text"
-            name="tipoVehiculo"
-            value={vehiculo.idTipoVehiculo}
-            onChange={handleChange}
-            placeholder="Tipo Vehiculo"
-            required
-          />
-          <StyledLabel>id Color:</StyledLabel>
+          >
+            <option value="">Seleccione un tipo</option>
+            {tipoVehiculos
+              .map((tv) => (
+                <option value={tv.idTipo}>{tv.nombre}</option>
+              ))}
+          </StyledSelect>
+          <StyledLabel>Color:</StyledLabel>
           <StyledInput
             type="text"
             name="idColor"
@@ -122,7 +174,7 @@ const resetForm = () => {
             placeholder="Color"
             required
           />
-          <StyledLabel>id Combustible:</StyledLabel>
+          <StyledLabel>Combustible:</StyledLabel>
           <StyledInput
             type="text"
             name="idCombustible"
@@ -140,7 +192,7 @@ const resetForm = () => {
             placeholder="año"
             required
           />
-          <StyledLabel>idMarca:</StyledLabel>
+          <StyledLabel>Marca:</StyledLabel>
           <StyledInput
             type="text"
             name="idMarca"
@@ -158,7 +210,7 @@ const resetForm = () => {
             placeholder="estado"
             required
           />
-          <StyledLabel>id Transmision:</StyledLabel>
+          <StyledLabel>Transmision:</StyledLabel>
           <StyledInput
             type="text"
             name="idTransmision"
@@ -254,3 +306,4 @@ const BotonAgregar = styled(BotonAccion)`
     background-color: #0056b3;
   }
 `;
+const StyledSelect = styled(StyledInput).attrs({ as: 'select' })``;

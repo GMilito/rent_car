@@ -10,10 +10,55 @@ const AdmVehiculos = () => {
   const [vehiculos, setVehiculos] = useState([]);
   //Neuvo estado para controlar el filtrado de vehiculos
   const [filtroidVehiculo, setFiltroVehiculo] = useState('');
+  const [colores, setColores] = useState([])
+  const [combustibles, setCombustibles] = useState([])
+  const [transmisiones, setTransmisiones] = useState([])
+  const [marcas, setMarcas] = useState([])
+  const [tipoVehiculos, setTipoVehiculos] = useState([])
 
+  const cargarColores = () => {
+    fetch('http://127.0.0.1:3001/color')
+      .then(response => response.json())
+      .then(data => {
+        setColores(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarCombustible = () => {
+    fetch('http://127.0.0.1:3001/combustible')
+      .then(response => response.json())
+      .then(data => {
+        setCombustibles(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarTransmisiones = () => {
+    fetch('http://127.0.0.1:3001/transmision')
+      .then(response => response.json())
+      .then(data => {
+        setTransmisiones(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarMarcas = () => {
+    fetch('http://127.0.0.1:3001/marca')
+      .then(response => response.json())
+      .then(data => {
+        setMarcas(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarTipoVehiculo = () => {
+    fetch('http://127.0.0.1:3001/tipoVehiculo')
+      .then(response => response.json())
+      .then(data => {
+        setTipoVehiculos(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
 
   const cargarVehiculos = () => {
-    fetch('http://127.0.0.1:3001/vehiculos-sql')
+    fetch('http://127.0.0.1:3001/vehiculos')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -23,26 +68,31 @@ const AdmVehiculos = () => {
   };
   useEffect(() => {
     cargarVehiculos();
+    cargarColores();
+    cargarCombustible();
+    cargarTransmisiones();
+    cargarMarcas();
+    cargarTipoVehiculo();
   }, []);
- 
+
 
 
   const handleDelete = async (idVehiculo) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    
+
     if (!confirmar) {
       return;
     }
-    
+
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
       const url = `http://127.0.0.1:3001/vehiculos/${idVehiculo}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
-      
+
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
       console.log('Vehiculo eliminado:', data.message);
-    
+
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
       setVehiculos(prevVehiculos => prevVehiculos.filter(vehiculo => vehiculo.idVehiculo !== idVehiculo));
     } catch (error) {
@@ -50,59 +100,12 @@ const AdmVehiculos = () => {
       alert(`Error al eliminar el vehiculo: ${error.message}`);
     }
   };
-  
-  
-  
-
-  //NO BORRAR SE CAE
-  const handleActualizarVehiculo = (vehiculoActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(vehiculoActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el cliente');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/vehiculos-sql/${vehiculoActualizado.idVehiculo}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/vehiculos-mysql/${vehiculoActualizado.idVehiculo}`)
-      .then(() => {
-        console.log('Vehiculo actualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = vehiculos.findIndex(vehiculo => vehiculo.idVehiculo === vehiculoActualizado.idVehiculo);
-    const vehiculosActualizados = [...vehiculos];
-    vehiculosActualizados[indice] = vehiculoActualizado;
-    setVehiculos(vehiculosActualizados);
-  };
-  
 
   return (
-    
+
     <ContenedorTabla>
       <h1>Administación de vehiculos</h1>
-     
+
       <BotonAgregar as={Link} to="/AdmVehiculos/FormVehiculo">Nuevo</BotonAgregar>
       <StyledInput
         type="text"
@@ -110,7 +113,7 @@ const AdmVehiculos = () => {
         value={filtroidVehiculo}
         onChange={(e) => setFiltroVehiculo(e.target.value)}
       />
-      
+
       <Table>
         <thead>
           <Tr>
@@ -118,31 +121,41 @@ const AdmVehiculos = () => {
             <Th>Tipo Vehiculo</Th>
             <Th>Color</Th>
             <Th>Combustible</Th>
-            <Th>Año</Th>
-            <Th>Marca</Th>
-            <Th>Estado</Th>
             <Th>Transmision</Th>
+            <Th>Marca</Th>
+            <Th>Año</Th>
+            <Th>Estado</Th>
+
             <Th></Th>
           </Tr>
         </thead>
         <tbody>
-        {vehiculos
-          .filter((vehiculo) => vehiculo.idVehiculo.includes(filtroidVehiculo))
-          .map((vehiculo) => (
-            <Tr key={vehiculo.idVehiculo}>
-              <Td><a href={`/AdmVehiculos/FormVehiculoModificar/${vehiculo.idVehiculo}`}>{vehiculo.idVehiculo}</a></Td>
-              <Td>{vehiculo.idTipoVehiculo}</Td>
-              <Td>{vehiculo.idColor}</Td>
-              <Td>{vehiculo.idCombustible}</Td>
-              <Td>{vehiculo.año}</Td>
-              <Td>{vehiculo.idMarca}</Td>
-              <Td>{vehiculo.estado}</Td>
-              <Td>{vehiculo.idTransmision}</Td>
-              <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(vehiculo.idVehiculo)}>Eliminar</BotonAccionEliminar>
-              </Td>
-            </Tr>
-        ))}
+          {vehiculos
+            .map((vehiculo) => {
+              const color = colores.find(c => c.idColor === vehiculo.idColor);
+              const tipoVehiculo = tipoVehiculos.find(tv => tv.idTipo === vehiculo.idTipoVehiculo);
+              const combustible = combustibles.find(c => c.idCombustible === vehiculo.idCombustible);
+              const transmision = transmisiones.find(c => c.idTransmision === vehiculo.idTransmision);
+              const marca = marcas.find(c => c.idMarca === vehiculo.idMarca);
+
+              console.log("Select COLORES");
+              console.log(colores);
+              return (
+                <Tr key={vehiculo.idVehiculo}>
+                  <Td><a href={`/AdmVehiculos/FormVehiculoModificar/${vehiculo.idVehiculo}`}>{vehiculo.idVehiculo}</a></Td>
+                  <Td>{tipoVehiculo ? tipoVehiculo.nombre : 'No disponible'}</Td>
+                  <Td>{color ? color.nombreColor : 'No disponible'}</Td>
+                  <Td>{combustible ? combustible.nombreCombustible : 'No disponible'}</Td>
+                  <Td>{transmision ? transmision.tipoTransmision : 'No disponible'}</Td>
+                  <Td>{marca ? marca.nombreMarca : 'No disponible'}</Td>
+                  <Td>{vehiculo.año}</Td>
+                  <Td>{vehiculo.estado}</Td>
+                  <Td>
+                    <BotonAccionEliminar onClick={() => handleDelete(vehiculo.idVehiculo)}>Eliminar</BotonAccionEliminar>
+                  </Td>
+                </Tr>
+              );
+            })}
         </tbody>
       </Table>
     </ContenedorTabla>
