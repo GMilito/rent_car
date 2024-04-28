@@ -13,11 +13,11 @@ const links = [
   },
   {
     name : "Registrar tarjeta a cliente",
-    href : "/RegTarjeta",
+    href : "/AdmColores",
   },
   {
-    name : "Usuarios",
-    href : "/Usuarios",
+    name : "Colores",
+    href : "/AdmColores",
   },
 ]
 
