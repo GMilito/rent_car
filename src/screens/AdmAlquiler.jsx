@@ -24,7 +24,8 @@ const AdmAlquiler = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
     
   };
- /* const cargarArquiler = () => {
+  /*
+  const cargarArquiler = () => {
     fetch('http://127.0.0.1:3001/alquiler')
     .then(response => response.json())
     .then(data => {
@@ -48,8 +49,8 @@ const AdmAlquiler = () => {
     cargarArquiler();
   }, []);
 
-  const handleDelete = async (id) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el cliente seleccionado?");
+  const handleDelete = async (idAlquiler) => {
+    const confirmar = window.confirm("¿Realmente desea eliminar el Alquiler seleccionado?");
 
     if (!confirmar) {
       return;
@@ -57,18 +58,18 @@ const AdmAlquiler = () => {
 
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/alquiler/${id}`;
+      const url = `http://127.0.0.1:3001/alquiler/${idAlquiler}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
 
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Cliente eliminado:', data.message);
+      console.log('Alquiler eliminado:', data.message);
 
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setClientes(prevClientes => prevClientes.filter(cliente => cliente.id !== id));
+      setAlquileres(prevAlquileres => prevAlquileres.filter(alquiler => alquiler.idAlquiler !== idAlquiler));
     } catch (error) {
-      console.error('Error al eliminar el cliente:', error);
-      alert(`Error al eliminar el cliente: ${error.message}`);
+      console.error('Error al eliminar el alquilar:', error);
+      alert(`Error al eliminar el alquilar: ${error.message}`);
     }
   };
 
@@ -77,9 +78,9 @@ const AdmAlquiler = () => {
   return (
 
     <ContenedorTabla>
-      <h1>Administación de clientes</h1>
+      <h1>Administación de alquiler</h1>
 
-      <BotonAgregar as={Link} to="/AdmClientes/FormCliente">Nuevo</BotonAgregar>
+      <BotonAgregar as={Link} to="/AdmAlquiler/FormAlquiler">Nuevo</BotonAgregar>
       <StyledInput
         type="text"
         placeholder="Identificación"
