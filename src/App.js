@@ -19,6 +19,7 @@ import FormCliente from './screens/FormCliente';
 import FormClienteModificar from './screens/FormClienteModificar';
 import Principal from './screens/Principal';
 import FormVehiculo from './screens/FormVehiculo';
+import FormVehiculoModificar from './screens/FormVehiculoModificar';
 
 
 function AppWrapper() {
@@ -38,7 +39,7 @@ function AppWrapper() {
           <Route path="/AdmClientes/FormClienteModificar/:idCliente" element={<FormClienteModificar/>} />
           <Route path='/AdmVehiculos' element={<AdmVehiculos/>} />
           <Route path="/AdmVehiculos/FormVehiculo" element={<FormVehiculo/>} />
-          <Route path="/AdmVehiculos/FormVehiculosModificar/:id" element={<FormClienteModificar/>} />
+          <Route path="/AdmVehiculos/FormVehiculoModificar/:id" element={<FormVehiculoModificar/>} />
       </Routes>
     </div>
   );

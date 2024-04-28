@@ -1,124 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
 
-const FormvehiculoModificar = ({onActualizarVehiculo}) => {
-  const [vehiculoModificar, setVehiculoModificar] = useState({  idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
-  const { idVehiculo } = useParams();
+import React, { useState, useEffect} from 'react';
+import { Link, useParams } from 'react-router-dom';
+
+import styled from 'styled-components';
+
+const FormVehiculoModificar = () => {
+  const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'Disponible', idTransmision: ''});
+  const [colores, setColores] = useState([])
+  const [combustibles, setCombustibles] = useState([])
+  const [transmisiones, setTransmisiones] = useState([])
+  const [marcas, setMarcas] = useState([])
+  const [tipoVehiculos, setTipoVehiculos] = useState([])
+  const {id} = useParams();
+
+   const cargarDatosIniciales = () => {
+    Promise.all([
+      fetch('http://127.0.0.1:3001/color').then(res => res.json()).then(data => setColores(data)),
+      fetch('http://127.0.0.1:3001/combustible').then(res => res.json()).then(data => setCombustibles(data)),
+      fetch('http://127.0.0.1:3001/transmision').then(res => res.json()).then(data => setTransmisiones(data)),
+      fetch('http://127.0.0.1:3001/marca').then(res => res.json()).then(data => setMarcas(data)),
+      fetch('http://127.0.0.1:3001/tipoVehiculo').then(res => res.json()).then(data => setTipoVehiculos(data)),
+      fetch(`http://127.0.0.1:3001/vehiculos/${id}`).then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.json();
+      }).then(data => {
+        console.log("carga exitosa")
+        setVehiculo(data);
+        console.log(data)
+      }).catch(error => console.error("Error al obtener los datos del vehículo:", error))
+    ]).catch(error => console.error("Error al cargar datos iniciales:", error));
+  };
 
   useEffect(() => {
-    cargarvehiculo(+idVehiculo); // Modificado: Pasar idCliente como argumento
-    console.log("idVehiculo: "+idVehiculo)
-  }, [idvehiculo]);
+    cargarDatosIniciales();
+  }, []);
 
-  const cargarVehiculo = (idvehiculo) => {
-    fetch(`http://127.0.0.1:3001/vehiculos-sql/${idvehiculo}`)
-      .then(response => response.json())
-      .then(data => {
-      
-        if (data) {
-          console.log(data);
-          setVehiculoModificar({
-            idVehiculo:vehiculo.idVehiculo,
-            idTipoVehiculo: vehiculo.idTipoVehiculo,
-            idColor: vehiculo.idColor,
-            idCombustible: vehiculo.idCombustible,
-            año: vehiculo.año,
-            idMarca: vehiculo.idMarca, 
-            estado: vehiculo.estado,
-            idTransmision: vehiculo.idTransmision,
-          });
 
-        }
-      })
-      .catch(error => console.error("Error al obtener los datos:", error));
-  };
+
   const handleChange = (e) => {
-    setVehiculoModificar({ ...vehiculoModificar, [e.target.name]: e.target.value });
+    setVehiculo({ ...vehiculo, [e.target.name]: e.target.value });
   };
-
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    // Asegúrate de validar correctamente los campos antes de enviar la petición.
-    if (!cliente.identificacion|| !cliente.nombre || !cliente.apellidos || !cliente.telefono || !cliente.telefono|| !cliente.paisResidencia || !cliente.direccion || !cliente.numeroTarjeta || !cliente.tipoTarjeta || !cliente.tipoCliente) {
+
+    
+    if (!id || !vehiculo.idTipoVehiculo || !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca || !vehiculo.estado || !vehiculo.idTransmision) {
       console.error('Todos los campos son obligatorios');
       return;
     }
+
   
-    // Configura la petición PUT
-    fetch(`http://127.0.0.1:3001/clientes/${vehiculoModificar.idVehiculo}`, {
-      method: 'PUT',
-      headers: { 
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        idTipoVehiculo: vehiculo.idTipoVehiculo,
-        idColor: vehiculo.idColor,
-        idCombustible: vehiculo.idCombustible,
-        año: vehiculo.año,
-        idMarca: vehiculo.idMarca, 
-        estado: vehiculo.estado,
-        idTransmision: vehiculo.idTransmision,
+    const modificarVehiculo = (url, vehiculoData) => {
+      return fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(vehiculoData)
       })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data.message);
-   
-      alert(data.message);
-   
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      // Manejar el error mostrando un mensaje al usuario, etc.
-    });
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      });
+    };
+
+    const datosVehiculo = {
+      IDTipo: vehiculo.idTipoVehiculo,
+      Color: vehiculo.idColor,
+      TipoCombustible: vehiculo.idCombustible,
+      Año: vehiculo.año,
+      Marca: vehiculo.idMarca, 
+      Estado: vehiculo.estado,
+      IdTransmision: vehiculo.idTransmision,
+    };
+
+
+    const vehiculoUrl = `http://127.0.0.1:3001/vehiculos/${id}`;
+    modificarVehiculo(vehiculoUrl, datosVehiculo)
+      .then(data => {
+        console.log('Vehículo modificado en SQL Server:', data);
+        alert('Vehículo modificado con éxito');
+        resetForm();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Error al modificar el vehículo. ' + error.message);
+      });
   };
+
   
+  
+
+
+const resetForm = () => {
+    setVehiculo({ idTipoVehiculo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
+};
+
 
   return (
     <ContenedorTabla>
-      <h1>Modificar vehiculo</h1>
+      <h1>Crear Vehiculo</h1>
       <FormContainer>
-      <StyledForm onSubmit={handleSubmit}>
-        <StyledLabel>idVehiculo:</StyledLabel>
-        <StyledInput
-            type="text"
-            name="idVehiculo"
-            value={vehiculo.idVehiculo}
-            onChange={handleChange}
-            placeholder="idVehiculo"
-            required
-          />
-          <StyledLabel>id Tipo Vehiculo:</StyledLabel>
-          <StyledInput
-            type="text"
-            name="tipoVehiculo"
+        <StyledForm onSubmit={handleSubmit}>
+        
+          <StyledLabel>Tipo Vehiculo:</StyledLabel>
+          <StyledSelect
+            name="idTipoVehiculo"
             value={vehiculo.idTipoVehiculo}
             onChange={handleChange}
-            placeholder="Tipo Vehiculo"
             required
-          />
-          <StyledLabel>id Color:</StyledLabel>
-          <StyledInput
-            type="text"
+          >
+            <option value="">Seleccione un tipo</option>
+            {tipoVehiculos
+              .map((tv) => (
+                <option value={tv.idTipo}>{tv.nombre}</option>
+              ))}
+          </StyledSelect>
+          <StyledLabel>Color:</StyledLabel>
+          <StyledSelect
             name="idColor"
             value={vehiculo.idColor}
             onChange={handleChange}
-            placeholder="Color"
             required
-          />
-          <StyledLabel>id Combustible:</StyledLabel>
-          <StyledInput
-            type="text"
+          >
+            <option value="">Seleccione un color</option>
+            {colores
+              .map((color) => (
+                <option value={color.idColor}>{color.nombreColor}</option>
+              ))}
+          </StyledSelect>
+          <StyledLabel>Combustible:</StyledLabel>
+          <StyledSelect
             name="idCombustible"
             value={vehiculo.idCombustible}
             onChange={handleChange}
-            placeholder="Combustible"
             required
-          />
+          >
+            <option value="">Seleccione un combustible</option>
+            {combustibles
+              .map((tv) => (
+                <option value={tv.idCombustible}>{tv.nombreCombustible}</option>
+              ))}
+          </StyledSelect>
           <StyledLabel>Año:</StyledLabel>
           <StyledInput
             type="text"
@@ -128,33 +154,33 @@ const FormvehiculoModificar = ({onActualizarVehiculo}) => {
             placeholder="año"
             required
           />
-          <StyledLabel>idMarca:</StyledLabel>
-          <StyledInput
-            type="text"
+          <StyledLabel>Marca:</StyledLabel>
+          <StyledSelect
             name="idMarca"
             value={vehiculo.idMarca}
             onChange={handleChange}
-            placeholder="Marca"
             required
-          />
-          <StyledLabel>Estado:</StyledLabel>
-          <StyledInput
-            type="text"
-            name="estado"
-            value={vehiculo.estado}
-            onChange={handleChange}
-            placeholder="estado"
-            required
-          />
-          <StyledLabel>id Transmision:</StyledLabel>
-          <StyledInput
-            type="text"
+          >
+            <option value="">Seleccione una marca</option>
+            {marcas
+              .map((tv) => (
+                <option value={tv.idMarca}>{tv.nombreMarca}</option>
+              ))}
+          </StyledSelect>
+         
+          <StyledLabel>Transmision:</StyledLabel>
+          <StyledSelect
             name="idTransmision"
             value={vehiculo.idTransmision}
             onChange={handleChange}
-            placeholder="Transmision"
             required
-          />
+          >
+            <option value="">Seleccione un tipo</option>
+            {transmisiones
+              .map((tv) => (
+                <option value={tv.idTransmision}>{tv.tipoTransmision}</option>
+              ))}
+          </StyledSelect>
 
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
@@ -166,7 +192,8 @@ const FormvehiculoModificar = ({onActualizarVehiculo}) => {
   );
 };
 
-export default FormvehiculoModificar;
+export default FormVehiculoModificar;
+
 
 
 const ContenedorTabla = styled.div`
@@ -194,7 +221,7 @@ const FormContainer = styled.div`
 
 const StyledForm = styled.form`
   display: flex;
-  max-width:350px;
+  max-width:500px;
   flex-direction: column;
   gap: 15px;
 `;
@@ -241,3 +268,4 @@ const BotonAgregar = styled(BotonAccion)`
     background-color: #0056b3;
   }
 `;
+const StyledSelect = styled(StyledInput).attrs({ as: 'select' })``;
