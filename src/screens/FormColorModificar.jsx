@@ -1,18 +1,33 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';//poner use params 
 
 import styled from 'styled-components';
 
-const FormColor = () => {
+const FormColorModificar = () => {
+
   const [color, setColor] = useState({nombreColor: ''});
-
-
+  const {idColor} = useParams(); //poner use params
+  const cargarColor = () => {
+    if (!idColor) {
+      console.error("No hay ID de Color proporcionado");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/color/${idColor}`)
+      .then(response => response.json())
+      .then(data => {
+        setColor(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
+useEffect(() => {
+    cargarColor();
+  }, []);
 
   const handleChange = (e) => {
     setColor({ ...color, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
   
@@ -21,46 +36,40 @@ const FormColor = () => {
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+    const modificarColor = (colorData) => {
+        return fetch(`http://127.0.0.1:3001/color/${idColor}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(colorData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
+      };
+    
+      // Construir objeto con datos del cliente a modificar
+      const datosColor = {
+        nombreColor: color.nombreColor,
+      };
+    
+      // Intentar modificar el cliente en la base de datos
+      modificarColor(datosColor)
+        .then(data => {
+          console.log('Color modificado con éxito:', data);
+          alert('Color modificado con éxito');
+          
+        })
+        .catch(error => {
+          console.error('Error al modificar el ccolor:', error);
+          alert('Error al modificar el color: ' + error.message);
+        });
     };
   
-
-    const datosColor = {
-      nombreColor: color.nombreColor,
-    }
-    // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/color', datosColor)
-      .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito.');
-        resetForm(); 
-        console.log('Color agregado en SQL Server:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el color. ' + error.message);
-      });
-  };
-  
-  
-
-
-const resetForm = () => {
-    setColor({ nombreColor: ''});
-};
 
 
   return (
@@ -87,10 +96,7 @@ const resetForm = () => {
   );
 };
 
-export default FormColor;
-
-
-
+export default FormColorModificar;
 const ContenedorTabla = styled.div`
   padding:50px;
 

@@ -67,9 +67,6 @@ const FormDetalleAlquiler = () => {
         alert('Error al agregar el color. ' + error.message);
       });
   };
-  
-  
-
 
 const resetForm = () => {
     setDetallesAlquileres({idAlquiler: '', fechaDevolucion: '', montoTotal: ''});

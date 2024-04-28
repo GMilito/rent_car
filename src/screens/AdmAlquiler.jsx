@@ -4,83 +4,134 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
+////////linea 7 cambio prueba/////
 
-
-const AdmColores = () => {
-  const [colores, setColores] = useState([]);
+const AdmAlquiler = () => {
+  const [alquileres, setAlquileres] = useState([]);
+  //const [paises, setPaises] = useState([]);
+  //const [tiposClientes, setTiposClientes] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
-  const cargarColores = () => {
-    fetch('http://127.0.0.1:3001/color')
+  //const [filtroCedula, setFiltroCedula] = useState('');
+
+
+  const cargarArquiler = () => {
+    fetch('http://127.0.0.1:3001/alquiler')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
-        setColores(data);
+        setAlquileres(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
-  };
-  useEffect(() => {
-    cargarColores();
-  }, []);
- 
-
-
-  const handleDelete = async (idColor) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     
+  };
+ /* const cargarArquiler = () => {
+    fetch('http://127.0.0.1:3001/alquiler')
+    .then(response => response.json())
+    .then(data => {
+      setAlquileres(data);
+      console.log("tipos clientes")
+      console.log(data)
+    })
+    .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarPaises = () => {
+    fetch('http://127.0.0.1:3001/paises')
+    .then(response => response.json())
+    .then(data => {
+      setPaises(data);
+      
+    })
+    .catch(error => console.error("Error al obtener los datos:", error));
+  };
+*/
+  useEffect(() => {
+    cargarArquiler();
+  }, []);
+
+  const handleDelete = async (id) => {
+    const confirmar = window.confirm("¿Realmente desea eliminar el cliente seleccionado?");
+
     if (!confirmar) {
       return;
     }
-    
+
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/color/${idColor}`;
+      const url = `http://127.0.0.1:3001/alquiler/${id}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
-      
+
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Color eliminado:', data.message);
-    
+      console.log('Cliente eliminado:', data.message);
+
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setColores(prevColores=> prevColores.filter(color => color.idColor !== idColor));
+      setClientes(prevClientes => prevClientes.filter(cliente => cliente.id !== id));
     } catch (error) {
-      console.error('Error al eliminar el color:', error);
+      console.error('Error al eliminar el cliente:', error);
       alert(`Error al eliminar el cliente: ${error.message}`);
     }
   };
-  
+
+
 
   return (
-    
+
     <ContenedorTabla>
-      <h1>Administación de colores</h1>
-      <BotonAgregar as={Link} to="/AdmColores/FormColor">Nuevo</BotonAgregar>
-      
+      <h1>Administación de clientes</h1>
+
+      <BotonAgregar as={Link} to="/AdmClientes/FormCliente">Nuevo</BotonAgregar>
+      <StyledInput
+        type="text"
+        placeholder="Identificación"
+        value={filtroCedula}
+        onChange={(e) => setFiltroCedula(e.target.value)}
+      />
+
       <Table>
         <thead>
           <Tr>
             <Th>ID</Th>
             <Th>Nombre</Th>
+            <Th>Apellido</Th>
+            <Th>Telefono</Th>
+            <Th>Identificacion</Th>
+            <Th>Pais residencia</Th>
+            <Th>Direccion</Th>
+            <Th>Tipo de Cliente</Th>
             <Th></Th>
           </Tr>
         </thead>
         <tbody>
-        {colores
-          .map((color) => (
-            <Tr key={color.idColor}>
-               <Td><a href={`/AdmColores/FormColorModificar/${color.idColor}`}>{color.idColor}</a></Td>
-              <Td>{color.nombreColor}</Td>
-              <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(color.idColor)}>Eliminar</BotonAccionEliminar>
-              </Td>
-            </Tr>
-        ))}
+          {clientes
+            .filter((cliente) => cliente.identificacion.includes(filtroCedula))
+            .map((cliente) => {
+              const pais = paises.find(p => p.idPais === cliente.idPaisResidencia);  // Encuentra el país correspondiente al ID
+              const tipoCliente = tiposClientes.find(t => t.idTipoCliente === cliente.tipoCliente);
+              console.log("TIPO CLIENTE")
+              console.log(tipoCliente)
+              return (
+                <Tr key={cliente.id}>
+                  <Td><a href={`/AdmClientes/FormClienteModificar/${cliente.id}`}>{cliente.id}</a></Td>
+                  <Td>{cliente.nombre}</Td>
+                  <Td>{cliente.apellidos}</Td>
+                  <Td>{cliente.telefono}</Td>
+                  <Td>{cliente.identificacion}</Td>
+                  <Td>{pais ? pais.nombrePais : 'No disponible'}</Td>
+                  <Td>{cliente.direccion}</Td>
+                  <Td>{tipoCliente ? tipoCliente.tipoCliente : 'No disponible'}</Td>
+                  <Td>
+                    <BotonAccionEliminar onClick={() => handleDelete(cliente.id)}>Eliminar</BotonAccionEliminar>
+                  </Td>
+                </Tr>
+              );
+            })}
         </tbody>
       </Table>
     </ContenedorTabla>
   );
 };
 
-export default AdmColores;
+export default AdmClientes;
 
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes
