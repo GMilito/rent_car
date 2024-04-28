@@ -5,11 +5,10 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FormClienteModificar = () => {
+
   const [cliente, setCliente] = useState({ nombre: '', apellidos: '', telefono: '', identificacion: '', paisResidencia: '', direccion: '', tipoCliente: '' });
   const [paises, setPaises] = useState([]);
   const {idCliente} = useParams();
-
-
   const cargarCliente = () => {
     if (!idCliente) {
       console.error("No hay ID de cliente proporcionado");

@@ -2,11 +2,13 @@
 import './App.css';
 
 import Navbar from './components/Navbar';
-import AdmClientes from './screens/AdmClientes';
+import AdmClientes from './screens/AdmClientes'; //1
 import AdmVehiculos from './screens/AdmVehiculos';
 import AdmColores from './screens/AdmColores';
 import Usuarios from './screens/Usuarios';
 import Login from './screens/Login';
+import FormColor from './screens/FormColor';
+
 
 import {
   BrowserRouter as Router,
@@ -21,7 +23,7 @@ import FormClienteModificar from './screens/FormClienteModificar';
 import Principal from './screens/Principal';
 import FormVehiculo from './screens/FormVehiculo';
 import FormVehiculoModificar from './screens/FormVehiculoModificar';
-
+import FormColorModificar from './screens/FormColorModificar';
 
 function AppWrapper() {
   const location = useLocation();
@@ -38,11 +40,14 @@ function AppWrapper() {
           <Route path='/Alquileres' element={<Alquileres/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
           <Route path='/AdmColores' element={<AdmColores/>} />
+          <Route path='/AdmColores/FormColor' element={<FormColor/>} />
+          <Route path='/AdmColores/FormColorModificar/:idColor' element={<FormColorModificar/>}/>
           <Route path="/AdmClientes/FormCliente" element={<FormCliente/>} />
           <Route path="/AdmClientes/FormClienteModificar/:idCliente" element={<FormClienteModificar/>} />
           <Route path='/AdmVehiculos' element={<AdmVehiculos/>} />
           <Route path="/AdmVehiculos/FormVehiculo" element={<FormVehiculo/>} />
           <Route path="/AdmVehiculos/FormVehiculoModificar/:id" element={<FormVehiculoModificar/>} />
+
       </Routes>
     </div>
   );
