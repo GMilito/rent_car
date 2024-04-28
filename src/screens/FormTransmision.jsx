@@ -4,30 +4,28 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
+const FormTransmision = () => {
+  const [transmision, setTransmision] = useState({tipoTransmision: ''});
 
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    AdmTransmision({ ...transmision, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!color.nombreColor )  {
+    if (!transmision.tipoTransmision )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarTransmision = (url, marcaTransmision) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(marcaTransmision)
       })
       .then(response => {
         if (!response.ok) {
@@ -38,28 +36,28 @@ const FormColor = () => {
     };
   
 
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosTransmision= {
+      tipoTransmision: transmision.tipoTransmision,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarColor('http://127.0.0.1:3001/transmision-sql', datosTransmision)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
+        console.log('Transmision agregado en SQL Server:', data);
         // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
+        const idTransmision = data.idTransmision;
+        console.log('ID de la Transmision agregado:', idTransmision);
   
         // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
         // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
+        datosTransmision.idTransmision = idTransmision;
   
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarTransmision('http://127.0.0.1:3001/transmision-mysql', datosTransmision);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
+        console.log('Transmision agregado en MySQL:', data);
+        alert('Transmision agregado con éxito en ambas bases de datos');
      
         resetForm(); 
       })
@@ -68,42 +66,33 @@ const FormColor = () => {
         alert('Error al agregar el color. ' + error.message);
       });
   };
-  
-  
-
-
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setTransmision({ tipoTransmision: ''});
 };
-
-
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear transmision</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
             name="nombre"
-            value={color.nombreColor}
+            value={transmision.tipoTransmision}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Nombre Transmision"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmTransmision">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
     </ContenedorTabla>
   );
 };
-
-export default FormColor;
-
-
+export default FormTransmision;
 
 const ContenedorTabla = styled.div`
   padding:50px;

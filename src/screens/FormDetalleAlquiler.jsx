@@ -4,30 +4,27 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
+const FormDetalleAlquiler = () => {
+  const [detalleAlquiler, setDetallesAlquileres] = useState({idAlquiler: '', fechaDevolucion: '', montoTotal: ''});
 
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    setDetallesAlquileres({ ...detalleAlquiler, [e.target.name]: e.target.value });
   };
-  
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!color.nombreColor )  {
+    if (!detalleAlquiler.idAlquiler || !detalleAlquiler.fechaDevolucion|| !detalleAlquiler.montoTotal )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarDetalleAlquiler = (url, detalleAlquilerData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(detalleAlquilerData)
       })
       .then(response => {
         if (!response.ok) {
@@ -38,28 +35,30 @@ const FormColor = () => {
     };
   
 
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosDetallesAlquileres = {
+      idAlquiler: detalleAlquiler.idAlquiler,
+      fechaDevolucion: detalleAlquiler.fechaDevolucion,
+      montoTotal: detalleAlquiler.montoTotal
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarDetalleAlquiler('http://127.0.0.1:3001/detallesAlquileres-sql', datosDetallesAlquileres)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
+        console.log('Detalles de alquiler agregado en SQL Server:', data);
         // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
+        const idDetallesAlquiler = data.idDetallesAlquiler;
+        console.log('ID de detalle agregado:', id);
   
         // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
         // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
+        datosDetallesAlquileres.idDetallesAlquiler = idDetallesAlquiler;
   
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarDetalleAlquiler('http://127.0.0.1:3001/detallesAlquileres-mysql', datosDetallesAlquileres);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
+        console.log('Detalle de alquiler agregado en MySQL:', data);
+        alert('Detalle de alquiler agregado con éxito en ambas bases de datos');
      
         resetForm(); 
       })
@@ -73,37 +72,51 @@ const FormColor = () => {
 
 
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setDetallesAlquileres({idAlquiler: '', fechaDevolucion: '', montoTotal: ''});
 };
-
 
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear detalle de alquiler</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-          <StyledLabel>Nombre:</StyledLabel>
+          <StyledLabel>ID Alquiler:</StyledLabel>
           <StyledInput
             type="text"
-            name="nombre"
-            value={color.nombreColor}
+            name="idAlquiler"
+            value={detalleAlquiler.idAlquiler}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="ID Alquiler"
+            required
+          />
+          <StyledLabel>Fecha devolucion:</StyledLabel>
+          <StyledInput
+            type="date"
+            name="fechaDevolucion"
+            value={detalleAlquiler.fechaDevolucion}
+            onChange={handleChange}
+            placeholder="Fecha de Devolucion"
+            required
+          />
+          <StyledLabel>monto Total</StyledLabel>
+          <StyledInput
+            type="text"
+            name="montoTotal"
+            value={detalleAlquiler.montoTotal}
+            onChange={handleChange}
+            placeholder="Monto Total"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmDetallesAlquiler">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
     </ContenedorTabla>
   );
 };
-
-export default FormColor;
-
-
+export default FormDetalleAlquiler;
 
 const ContenedorTabla = styled.div`
   padding:50px;

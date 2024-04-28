@@ -4,30 +4,27 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
-
+const FormPaisResidencia = () => {
+  const [pais, setPais] = useState({nombrePais: ''});
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    setPais({ ...pais, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!color.nombreColor )  {
+    if (!pais.nombrePais )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarPais = (url, paisData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(paisData)
       })
       .then(response => {
         if (!response.ok) {
@@ -36,30 +33,28 @@ const FormColor = () => {
         return response.json();
       });
     };
-  
-
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosPais = {
+      nombrePais: pais.nombrePais,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarPais('http://127.0.0.1:3001/paises-sql', datosPais)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
+        console.log('Pais agregado en SQL Server:', data);
         // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
+        const idPais = data.idPais;
+        console.log('ID del Pais agregado:', idPais);
   
         // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
         // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
+        datosPais.idPais = idPais;
   
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarPais('http://127.0.0.1:3001/paises-mysql', datosPais);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
+        console.log('Pais agregado en MySQL:', data);
+        alert('Pais agregado con éxito en ambas bases de datos');
      
         resetForm(); 
       })
@@ -68,42 +63,33 @@ const FormColor = () => {
         alert('Error al agregar el color. ' + error.message);
       });
   };
-  
-  
-
-
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setPais({ nombrePais: ''});
 };
-
-
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear pais</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
             name="nombre"
-            value={color.nombreColor}
+            value={pais.nombrePais}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Nombre Pais"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmPaisResidencia">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
     </ContenedorTabla>
   );
 };
-
-export default FormColor;
-
-
+export default FormPaisResidencia;
 
 const ContenedorTabla = styled.div`
   padding:50px;

@@ -4,30 +4,28 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
+const FormMarca = () => {
+  const [marca, setMarca] = useState({nombreMarca: ''});
 
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    setMarca({ ...marca, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!color.nombreColor )  {
+    if (!marca.nombreMarca )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarMarca = (url, marcaData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(marcaData)
       })
       .then(response => {
         if (!response.ok) {
@@ -38,28 +36,28 @@ const FormColor = () => {
     };
   
 
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosMarca = {
+      nombreMarca: marca.nombreMarca,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarColor('http://127.0.0.1:3001/marcas-sql', datosMarca)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
+        console.log('Marca agregado en SQL Server:', data);
         // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
+        const idMarca = data.idMarca;
+        console.log('ID de la marca agregado:', idMarca);
   
         // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
         // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
+        datosMarca.idMarca = idMarca;
   
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarColor('http://127.0.0.1:3001/marcas-mysql', datosMarca);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
+        console.log('Marca agregado en MySQL:', data);
+        alert('Marca agregado con éxito en ambas bases de datos');
      
         resetForm(); 
       })
@@ -73,37 +71,34 @@ const FormColor = () => {
 
 
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setMarca({ nombreMarca: ''});
 };
 
 
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear marca</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
             name="nombre"
-            value={color.nombreColor}
+            value={marca.nombreMarca}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Nombre Marca"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmMarcas">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
     </ContenedorTabla>
   );
 };
-
-export default FormColor;
-
-
+export default FormMarca;
 
 const ContenedorTabla = styled.div`
   padding:50px;

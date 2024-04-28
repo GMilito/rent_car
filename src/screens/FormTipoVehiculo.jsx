@@ -1,33 +1,26 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
-
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
-
+const FormTipoVehiculo = () => {
+  const [tipoVehiculo, setTipoVehiculo] = useState({nombre: '', montoPorHora: ''});
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    setTipoVehiculo({ ...tipoVehiculo, [e.target.name]: e.target.value });
   };
-  
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    if (!color.nombreColor )  {
+    if (!tipoVehiculo.nombre || !tipoVehiculo.montoPorHora)  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarTipoVehiculo = (url, tipoVehiculoData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(tipoVehiculoData)
       })
       .then(response => {
         if (!response.ok) {
@@ -36,64 +29,64 @@ const FormColor = () => {
         return response.json();
       });
     };
-  
-
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosTipoVehiculo = {
+      nombre: tipoVehiculo.nombre,
+      montoPorHora: tipoVehiculo.montoPorHora
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarTipoVehiculo('http://127.0.0.1:3001/tipoVehiculo-sql', datosTipoVehiculo)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
-        // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
-  
-        // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
+        console.log('tipo vehiculo agregado en SQL Server:', data);
+        const idTipo = data.idTipo;
+        console.log('ID del tipo vehiculo agregado:', idTipo);
         // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
-  
+        datosTipoVehiculo.idTipo = idTipo;
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarColor('http://127.0.0.1:3001/tipoVehiculo-mysql', datosTipoVehiculo);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
-     
+        console.log('Tipo vehiculo agregado en MySQL:', data);
+        alert('Tipo vehiculo agregado con éxito en ambas bases de datos');
         resetForm(); 
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al agregar el color. ' + error.message);
+        alert('Error al agregar el tipo vehiculo. ' + error.message);
       });
   };
-  
-  
-
-
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setTipoVehiculo({ nombre: '', montoPorHora: ''});
 };
 
 
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear tipo vehiculo</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
             name="nombre"
-            value={color.nombreColor}
+            value={tipoVehiculo.nombre}
             onChange={handleChange}
             placeholder="Nombre Color"
             required
           />
+          <StyledLabel>Monto Por hora:</StyledLabel>
+
+            <StyledInput
+            type="text"
+            name="monto"
+            value={tipoVehiculo.montoPorHora}
+            onChange={handleChange}
+            placeholder="Monto Por Hora"
+            required
+          />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmTipoVehiculo">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
@@ -101,7 +94,7 @@ const resetForm = () => {
   );
 };
 
-export default FormColor;
+export default FormTipoVehiculo;
 
 
 

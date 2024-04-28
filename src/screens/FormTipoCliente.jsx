@@ -4,30 +4,27 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormColor = () => {
-  const [color, setColor] = useState({nombreColor: ''});
-
-
-
+const FormTipoCliente = () => {
+  const [tipoCliente, setTipoClientes] = useState({tipoCliente: ''});
   const handleChange = (e) => {
-    setColor({ ...color, [e.target.name]: e.target.value });
+    setTipoClientes({ ...tipoCliente, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!color.nombreColor )  {
+    if (!tipoCliente.tipoCliente )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarColor = (url, colorData) => {
+    const insertarTipoCliente = (url, tipoClienteData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(colorData)
+        body: JSON.stringify(tipoClienteData)
       })
       .then(response => {
         if (!response.ok) {
@@ -38,34 +35,33 @@ const FormColor = () => {
     };
   
 
-    const datosColor = {
-      nombreColor: color.nombreColor,
+    const datosTipoCliente = {
+      tipoCliente: tipoCliente.tipoCliente,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/colores-sql', datosColor)
+    insertarTipoCliente('http://127.0.0.1:3001/tipoCliente-sql', datosTipoCliente)
       .then(data => {
-        console.log('Color agregado en SQL Server:', data);
+        console.log('Tipo cliente agregado en SQL Server:', data);
         // Aquí capturamos el idCliente devuelto por el backend
-        const idColor = data.idColor;
-        console.log('ID del color agregado:', idColor);
-  
-        // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
-        // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
+        const idTipoCliente = data.tipoCliente;
+        console.log('ID del tipo de cliente agregado:', idTipoCliente);
+
+       
         // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosColor.idColor = idColor;
+        datosTipoCliente.idTipoCliente = idTipoCliente;
   
         // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/colores-mysql', datosColor);
+        return insertarTipoCliente('http://127.0.0.1:3001/tipoCliente-mysql', datosTipoCliente);
       })
       .then(data => {
-        console.log('Color agregado en MySQL:', data);
-        alert('Color agregado con éxito en ambas bases de datos');
+        console.log('Marca agregado en MySQL:', data);
+        alert('Tipo deCliente agregado con éxito en ambas bases de datos');
      
         resetForm(); 
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al agregar el color. ' + error.message);
+        alert('Error al agregar el tipo de cliente. ' + error.message);
       });
   };
   
@@ -73,37 +69,34 @@ const FormColor = () => {
 
 
 const resetForm = () => {
-    setCliente({ nombre: ''});
+    setTipoClientes({ tipoCliente: ''});
 };
 
 
   return (
     <ContenedorTabla>
-      <h1>Crear color</h1>
+      <h1>Crear tipo de cliente</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-          <StyledLabel>Nombre:</StyledLabel>
+          <StyledLabel>Tipo:</StyledLabel>
           <StyledInput
             type="text"
-            name="nombre"
-            value={color.nombreColor}
+            name="tipo"
+            value={tipoCliente.tipoCliente}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Tipo Cliente"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmColores">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmTipoCliente">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
     </ContenedorTabla>
   );
 };
-
-export default FormColor;
-
-
+export default FormTipoCliente;
 
 const ContenedorTabla = styled.div`
   padding:50px;
