@@ -37,6 +37,7 @@ function AppWrapper() {
           <Route path='/login' element={<Login/>} />
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
+          <Route path='/Alquileres' element={<Alquileres/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
           <Route path='/AdmColores' element={<AdmColores/>} />
           <Route path='/AdmColores/FormColor' element={<FormColor/>} />

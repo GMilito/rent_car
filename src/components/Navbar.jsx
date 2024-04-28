@@ -12,8 +12,8 @@ const links = [
     href : "/AdmVehiculos",
   },
   {
-    name : "Registrar tarjeta a cliente",
-    href : "/AdmColores",
+    name : "Alquileres",
+    href : "/Alquileres",
   },
   {
     name : "Colores",

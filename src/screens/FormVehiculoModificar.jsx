@@ -78,7 +78,8 @@ const FormVehiculoModificar = () => {
     };
 
 
-    const vehiculoUrl = `http://127.0.0.1:3001/vehiculos/${id}`;
+    const vehiculoUrl = `http://127.0.0.1:3001/vehiculos/${id
+  }`;
     modificarVehiculo(vehiculoUrl, datosVehiculo)
       .then(data => {
         console.log('Vehículo modificado en SQL Server:', data);
