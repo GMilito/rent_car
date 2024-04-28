@@ -4,6 +4,7 @@ import './App.css';
 import Navbar from './components/Navbar';
 import AdmClientes from './screens/AdmClientes';
 import AdmVehiculos from './screens/AdmVehiculos';
+import AdmColores from './screens/AdmColores';
 import Usuarios from './screens/Usuarios';
 import Login from './screens/Login';
 
@@ -35,6 +36,7 @@ function AppWrapper() {
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
+          <Route path='/AdmColores' element={<AdmColores/>} />
           <Route path="/AdmClientes/FormCliente" element={<FormCliente/>} />
           <Route path="/AdmClientes/FormClienteModificar/:idCliente" element={<FormClienteModificar/>} />
           <Route path='/AdmVehiculos' element={<AdmVehiculos/>} />
