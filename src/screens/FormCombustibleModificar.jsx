@@ -1,14 +1,31 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams} from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormCombustible= () => {
-  const [combustible, setCombustibles] = useState({nombreCombustible: ''});
+const FormCombustibleModificar= () => {
+  const [combustible, setCombustible] = useState({nombreCombustible: ''});
+  const {idCombustible} = useParams()
 
+  const cargarCombustible = () => {
+    if (!idCombustible) {
+      console.error("No hay ID de combustible proporcionado");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/combustibles/${idCombustible}`)
+      .then(response => response.json())
+      .then(data => {
+        setCombustible(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
+useEffect(() => {
+    cargarCombustible();
+  }, []);
+  
   const handleChange = (e) => {
-    setCombustibles({ ...combustible, [e.target.name]: e.target.value });
+    setCombustible({ ...combustible, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
@@ -19,46 +36,39 @@ const FormCombustible= () => {
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarCombustible = (url, combustibleData) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(combustibleData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+const modificarCombustible = (combustibleData) => {
+        return fetch(`http://127.0.0.1:3001/combustibles/${idCombustible}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(combustibleData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
+      };
+    
+      // Construir objeto con datos del cliente a modificar
+      const datosCombustible = {
+        nombreCombustible: combustible.nombreCombustible,
+      };
+    
+      // Intentar modificar el cliente en la base de datos
+      modificarCombustible(datosCombustible)
+        .then(data => {
+          console.log('Combustible modificado con éxito:', data);
+          alert('Combustible modificado con éxito');
+          
+        })
+        .catch(error => {
+          console.error('Error al modificar el combustible:', error);
+          alert('Error al modificar el combustible: ' + error.message);
+        });
     };
-  
-
-    const datosCombustible = {
-      nombreCombustible: combustible.nombreCombustible,
-    }
-    // Primero intentar insertar en SQL Server
-    insertarCombustible('http://127.0.0.1:3001/combustibles', datosCombustible)
-    .then(data => {
-      console.log('Combustible agregado en MySQL:', data);
-      alert('Combustible agregada con éxito.');
-      resetForm(); 
-      console.log('Combustible agregado en SQL Server:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el combustible. ' + error.message);
-      });
-  };
-  
-  
-
-
-const resetForm = () => {
-    setCombustibles({ nombreCombustible: ''});
-};
 
 
   return (
@@ -85,9 +95,7 @@ const resetForm = () => {
   );
 };
 
-export default FormCombustible;
-
-
+export default FormCombustibleModificar;
 
 const ContenedorTabla = styled.div`
   padding:50px;

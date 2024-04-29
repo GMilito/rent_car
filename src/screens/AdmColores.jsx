@@ -42,7 +42,7 @@ const AdmColores = () => {
       setColores(prevColores=> prevColores.filter(color => color.idColor !== idColor));
     } catch (error) {
       console.error('Error al eliminar el color:', error);
-      alert(`Error al eliminar el cliente: ${error.message}`);
+      alert(`Error al eliminar el color: ${error.message}`);
     }
   };
   

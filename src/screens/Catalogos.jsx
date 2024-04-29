@@ -18,6 +18,12 @@ const Catalogos = () => {
         
       <BotonAgregar as={Link} to="/AdmColores">Colores</BotonAgregar>
         <br></br>
+        <BotonAgregar as={Link} to="/AdmPaisResidencia">Paises</BotonAgregar>
+        <br></br>
+        <BotonAgregar as={Link} to="/AdmMarcas">Marcas</BotonAgregar>
+        <br></br>
+        <BotonAgregar as={Link} to="/AdmCombustibles">Combustibles</BotonAgregar>
+        <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmAlquileresActivos">Ver Alquileres Activos</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmHistorialAlquileres">Ver Historial de Alquileres</BotonAgregar>
