@@ -6,6 +6,8 @@ import styled from 'styled-components';
 
 const FormAlquiler = () => {
     const [alquiler, setAlquiler] = useState([]);
+    const [clientes, setClientes] = useState([]);
+    const [seguros, setSeguros] = useState([]);
     const [filtroCedula, setFiltroCedula] = useState('');
 
 
@@ -15,7 +17,12 @@ const FormAlquiler = () => {
 
 
     const handleChange = (e) => {
-        setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
+        if(e.target.name.equals('filtroCedula')){
+            setFiltroCedula(e.target.value);
+        }else {
+            setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
+        }
+        
     };
 
     const handleSubmit = (e) => {
@@ -69,7 +76,7 @@ const FormAlquiler = () => {
 
 
     const resetForm = () => {
-        setVehiculo({ idTipoVehiculo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: '', idTransmision: '' });
+        setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: ''});
     };
 
 
@@ -127,7 +134,7 @@ const FormAlquiler = () => {
                         required
                     >
                         <option value="">Seleccione un Seguro</option>
-                        {clientes
+                        {seguros
                             .map(cliente => (
                                 <option key={cliente.idCliente} value={cliente.idCliente}>
                                     {`${cliente.cedula} - ${cliente.nombreCliente} ${cliente.apellidoCliente}`}
