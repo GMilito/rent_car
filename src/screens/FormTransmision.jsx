@@ -8,7 +8,7 @@ const FormTransmision = () => {
   const [transmision, setTransmision] = useState({tipoTransmision: ''});
 
   const handleChange = (e) => {
-    AdmTransmision({ ...transmision, [e.target.name]: e.target.value });
+    setTransmision({ ...transmision, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
@@ -40,26 +40,12 @@ const FormTransmision = () => {
       tipoTransmision: transmision.tipoTransmision,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/transmision-sql', datosTransmision)
-      .then(data => {
-        console.log('Transmision agregado en SQL Server:', data);
-        // Aquí capturamos el idCliente devuelto por el backend
-        const idTransmision = data.idTransmision;
-        console.log('ID de la Transmision agregado:', idTransmision);
-  
-        // Si necesitas usar el idCliente para la siguiente inserción en MySQL o para otro propósito
-        // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
-        // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosTransmision.idTransmision = idTransmision;
-  
-        // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarTransmision('http://127.0.0.1:3001/transmision-mysql', datosTransmision);
-      })
-      .then(data => {
-        console.log('Transmision agregado en MySQL:', data);
-        alert('Transmision agregado con éxito en ambas bases de datos');
-     
-        resetForm(); 
+    insertarColor('http://127.0.0.1:3001/transmision', datosTransmision)
+    .then(data => {
+      console.log('Marca agregada en MySQL:', data);
+      alert('Marca agregada con éxito.');
+      resetForm(); 
+      console.log('Marca agregado en SQL Server:', data);
       })
       .catch(error => {
         console.error('Error:', error);
@@ -77,7 +63,7 @@ const resetForm = () => {
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
-            name="nombre"
+            name="nombretipoTransmision"
             value={transmision.tipoTransmision}
             onChange={handleChange}
             placeholder="Nombre Transmision"
