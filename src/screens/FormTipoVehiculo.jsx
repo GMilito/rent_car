@@ -39,11 +39,7 @@ const FormTipoVehiculo = () => {
         console.log('tipo vehiculo agregado en SQL Server:', data);
         const idTipo = data.idTipo;
         console.log('ID del tipo vehiculo agregado:', idTipo);
-        // Asegúrate de incluir el idCliente en el objeto datosCliente si es necesario para la inserción en MySQL
-        // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosTipoVehiculo.idTipo = idTipo;
-        // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarColor('http://127.0.0.1:3001/tipoVehiculo-mysql', datosTipoVehiculo);
+
       })
       .then(data => {
         console.log('Tipo vehiculo agregado en MySQL:', data);

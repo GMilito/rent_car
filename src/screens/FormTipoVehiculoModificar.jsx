@@ -16,7 +16,7 @@ const FormTipoVehiculoModificar = () => {
     fetch(`http://127.0.0.1:3001/tipoVehiculo/${idTipoVehiculo}`)
       .then(response => response.json())
       .then(data => {
-        setPais(data);
+        setTipoVehiculo(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
 };

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const admTipoVehiculo = () => {
+const AdmTipoVehiculo = () => {
   const [tipoVehiculos, setTipoVehiculos] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarTipoVehiculos = () => {
@@ -77,7 +77,7 @@ const admTipoVehiculo = () => {
   );
 };
 
-export default AdmColores;
+export default AdmTipoVehiculo;
 
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes

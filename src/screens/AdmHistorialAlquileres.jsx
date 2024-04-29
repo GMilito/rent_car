@@ -95,20 +95,20 @@ const BotonAccion = styled.button`
 `;
 
 const BotonAccionEliminar = styled(BotonAccion)`
-  background-color: #FF6347; /* Rojo */
+  background-color: #FF6347; 
   color: white;
 
   &:hover {
-    background-color: #E55347; /* Un rojo un poco más oscuro al pasar el mouse */
+    background-color: #E55347;
   }
 `;
 
 const BotonAccionModificar = styled(BotonAccion)`
-  background-color: #FFA500; /* Naranja */
+  background-color: #FFA500; 
   color: white;
 
   &:hover {
-    background-color: #cc8400; /* Un naranja un poco más oscuro al pasar el mouse */
+    background-color: #cc8400;
   }
 `;
 const BotonCerrar = styled.button`
