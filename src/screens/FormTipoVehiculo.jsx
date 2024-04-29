@@ -74,7 +74,7 @@ const resetForm = () => {
 
             <StyledInput
             type="text"
-            name="monto"
+            name="montoPorHora"
             value={tipoVehiculo.montoPorHora}
             onChange={handleChange}
             placeholder="Monto Por Hora"

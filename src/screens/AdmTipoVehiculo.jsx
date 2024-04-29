@@ -22,7 +22,6 @@ const AdmTipoVehiculo = () => {
  
   const handleDelete = async (idTipoVehiculo) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    
     if (!confirmar) { 
       return;
     }
