@@ -152,10 +152,10 @@ const AdmVehiculos = () => {
                   <Td>{vehiculo.estado}</Td>
                   <Td>
                     {vehiculo.estado == 'Disponible' ? (
-                      <BotonAlquilar as={Link} to="/AdmVehiculos/FormAlquiler">Alquilar</BotonAlquilar>
+                      <BotonAlquilar as={Link} to={`/AdmVehiculos/FormAlquiler/${vehiculo.idVehiculo}`}>Alquilar</BotonAlquilar>
                     ) : (
 
-                      <BotonDevolver as={Link} to="/AdmVehiculos/Devoluciones">Devolver</BotonDevolver>
+                      <BotonDevolver as={Link} to={`/AdmVehiculos/Devoluciones/${vehiculo.idVehiculo}`}>Devolver</BotonDevolver>
 
                     )}
                     <BotonAccionEliminar onClick={() => handleDelete(vehiculo.idVehiculo)}>Eliminar</BotonAccionEliminar>

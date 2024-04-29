@@ -4,14 +4,11 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-////////linea 7 cambio prueba/////
+
 
 const AdmAlquiler = () => {
   const [alquileres, setAlquileres] = useState([]);
-  //const [paises, setPaises] = useState([]);
-  //const [tiposClientes, setTiposClientes] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
-  //const [filtroCedula, setFiltroCedula] = useState('');
+
 
 
   const cargarArquiler = () => {
@@ -24,27 +21,7 @@ const AdmAlquiler = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
     
   };
-  /*
-  const cargarArquiler = () => {
-    fetch('http://127.0.0.1:3001/alquiler')
-    .then(response => response.json())
-    .then(data => {
-      setAlquileres(data);
-      console.log("tipos clientes")
-      console.log(data)
-    })
-    .catch(error => console.error("Error al obtener los datos:", error));
-  };
-  const cargarPaises = () => {
-    fetch('http://127.0.0.1:3001/paises')
-    .then(response => response.json())
-    .then(data => {
-      setPaises(data);
-      
-    })
-    .catch(error => console.error("Error al obtener los datos:", error));
-  };
-*/
+
   useEffect(() => {
     cargarArquiler();
   }, []);

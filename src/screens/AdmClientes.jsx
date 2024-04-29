@@ -22,26 +22,26 @@ const AdmClientes = () => {
         setClientes(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
-    
+
   };
   const cargarTipoCliente = () => {
     fetch('http://127.0.0.1:3001/tipoClientes')
-    .then(response => response.json())
-    .then(data => {
-      setTiposClientes(data);
-      console.log("tipos clientes")
-      console.log(data)
-    })
-    .catch(error => console.error("Error al obtener los datos:", error));
+      .then(response => response.json())
+      .then(data => {
+        setTiposClientes(data);
+        console.log("tipos clientes")
+        console.log(data)
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarPaises = () => {
     fetch('http://127.0.0.1:3001/pais')
-    .then(response => response.json())
-    .then(data => {
-      setPaises(data);
-      
-    })
-    .catch(error => console.error("Error al obtener los datos:", error));
+      .then(response => response.json())
+      .then(data => {
+        setPaises(data);
+
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
   };
 
   useEffect(() => {

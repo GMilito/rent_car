@@ -10,32 +10,39 @@ const FormAlquiler = () => {
     const [seguros, setSeguros] = useState([]);
     const [filtroCedula, setFiltroCedula] = useState('');
 
+    const cargarClientes = () => {
+        fetch('http://127.0.0.1:3001/clientes')
+            .then(response => response.json())
+            .then(data => {
 
-
-
-
-
+                setClientes(data);
+            })
+            .catch(error => console.error("Error al obtener los datos:", error));
+    };
+    useEffect(() => {
+        cargarClientes();
+    }, []);
 
     const handleChange = (e) => {
-        if(e.target.name.equals('filtroCedula')){
+        if (e.target.name === 'filtroCedula') {
             setFiltroCedula(e.target.value);
-        }else {
+        } else {
             setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
         }
-        
     };
+    
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!alquiler.idCliente || !alquiler.fechaEntrega || !alquiler.horaEntrega || !alquiler.idSeguro ) {
+        if (!alquiler.idCliente || !alquiler.fechaEntrega || !alquiler.horaEntrega || !alquiler.idSeguro) {
             console.error('Todos los campos son obligatorios');
             return;
         }
 
 
         // Definir una función auxiliar para insertar el cliente en una base de datos
-        const insertarVehiculo = (url, vehiculoData) => {
+        const insertarAlquiler = (url, vehiculoData) => {
             return fetch(url, {
                 method: 'POST',
                 headers: {
@@ -55,20 +62,20 @@ const FormAlquiler = () => {
         const datosAlquiler = {
             idCliente: alquiler.idTipoVehiculo,
             fechaEntrega: alquiler.idColor,
-            horaEntrega : alquiler.horaEntrega,
+            horaEntrega: alquiler.horaEntrega,
             idSeguro: alquiler.idCombustible,
         };
 
         // Primero intentar insertar en SQL Server
-        insertarVehiculo('http://127.0.0.1:3001/vehiculos', datosAlquiler)
+        insertarAlquiler('http://127.0.0.1:3001/vehiculos', datosAlquiler)
             .then(data => {
-                console.log('Vehiculo agregado en SQL Server:', data);
-                alert('Vehiculo agregado con éxito');
+                console.log('Alquiler agregado en SQL Server:', data);
+                alert('Alquiler agregado con éxito');
                 resetForm();
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Error al agregar el vehiculo. ' + error.message);
+                alert('Error al agregar el alquiler. ' + error.message);
             });
     };
 
@@ -76,7 +83,7 @@ const FormAlquiler = () => {
 
 
     const resetForm = () => {
-        setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: ''});
+        setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: '' });
     };
 
 
@@ -102,10 +109,10 @@ const FormAlquiler = () => {
                     >
                         <option value="">Seleccione un cliente</option>
                         {clientes
-                            .filter(cliente => cliente.cedula.includes(filtroCedula))
+                            .filter(cliente => cliente.identificacion.includes(filtroCedula))
                             .map(cliente => (
-                                <option key={cliente.idCliente} value={cliente.idCliente}>
-                                    {`${cliente.cedula} - ${cliente.nombreCliente} ${cliente.apellidoCliente}`}
+                                <option key={cliente.id} value={cliente.id}>
+                                    {`${cliente.identificacion} - ${cliente.nombre} ${cliente.apellidos}`}
                                 </option>
                             ))}
                     </StyledSelect>
