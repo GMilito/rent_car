@@ -7,7 +7,7 @@ const AdmTransmision = () => {
   const [transmision, setTransmision] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarTransmisiones = () => {
-    fetch('http://127.0.0.1:3001/transmisiones-sql')
+    fetch('http://127.0.0.1:3001/transmision')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -21,7 +21,7 @@ const AdmTransmision = () => {
  
 
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (idTransmision) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     
     if (!confirmar) {
@@ -30,7 +30,7 @@ const AdmTransmision = () => {
     
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/transmisiones/${idTransmision}`;
+      const url = `http://127.0.0.1:3001/transmision/${idTransmision}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
       

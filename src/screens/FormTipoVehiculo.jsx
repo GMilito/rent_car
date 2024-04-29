@@ -34,18 +34,13 @@ const FormTipoVehiculo = () => {
       montoPorHora: tipoVehiculo.montoPorHora
     }
     // Primero intentar insertar en SQL Server
-    insertarTipoVehiculo('http://127.0.0.1:3001/tipoVehiculo-sql', datosTipoVehiculo)
-      .then(data => {
-        console.log('tipo vehiculo agregado en SQL Server:', data);
-        const idTipo = data.idTipo;
-        console.log('ID del tipo vehiculo agregado:', idTipo);
-
-      })
-      .then(data => {
-        console.log('Tipo vehiculo agregado en MySQL:', data);
-        alert('Tipo vehiculo agregado con éxito en ambas bases de datos');
-        resetForm(); 
-      })
+    insertarTipoVehiculo('http://127.0.0.1:3001/tipoVehiculo', datosTipoVehiculo)
+    .then(data => {
+      console.log('Tipo Vehiculo agregada en MySQL:', data);
+      alert('Tipo Vehiculo agregada con éxito.');
+      resetForm(); 
+      console.log('Tipo Vehiculo agregado en SQL Server:', data);
+    })
       .catch(error => {
         console.error('Error:', error);
         alert('Error al agregar el tipo vehiculo. ' + error.message);
@@ -67,14 +62,14 @@ const resetForm = () => {
             name="nombre"
             value={tipoVehiculo.nombre}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Nombre Tipo"
             required
           />
           <StyledLabel>Monto Por hora:</StyledLabel>
 
             <StyledInput
-            type="text"
-            name="monto"
+            type="number"
+            name="montoPorHora"
             value={tipoVehiculo.montoPorHora}
             onChange={handleChange}
             placeholder="Monto Por Hora"

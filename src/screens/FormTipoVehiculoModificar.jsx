@@ -85,7 +85,7 @@ useEffect(() => {
           <StyledLabel>Monto Por hora:</StyledLabel>
 
             <StyledInput
-            type="text"
+            type="number"
             name="monto"
             value={tipoVehiculo.montoPorHora}
             onChange={handleChange}

@@ -26,6 +26,8 @@ const Catalogos = () => {
         <br></br>
         <BotonAgregar as={Link} to="/AdmTipoVehiculo">Tipo Vehiculo</BotonAgregar>
         <br></br>
+        <BotonAgregar as={Link} to="/AdmTransmision">Transmision</BotonAgregar>
+        <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmAlquileresActivos">Ver Alquileres Activos</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmHistorialAlquileres">Ver Historial de Alquileres</BotonAgregar>
