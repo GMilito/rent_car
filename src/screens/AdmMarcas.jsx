@@ -7,7 +7,7 @@ const AdmMarcas = () => {
   const [marcas, setMarcas] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarMarcas = () => {
-    fetch('http://127.0.0.1:3001/marcas-sql')
+    fetch('http://127.0.0.1:3001/marcas')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -18,7 +18,7 @@ const AdmMarcas = () => {
   useEffect(() => {
     cargarMarcas();
   }, []);
-   const handleDelete = async (id) => {
+   const handleDelete = async (idMarca) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     if (!confirmar) {
       return;
@@ -30,7 +30,6 @@ const AdmMarcas = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
       console.log('Marca eliminada:', data.message);
-    
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
       setMarcas(prevMarcas=> prevMarcas.filter(marca => marca.idMarca !== idMarca));
     } catch (error) {
@@ -39,57 +38,12 @@ const AdmMarcas = () => {
     }
   };
   
-
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
       <h1>Administación de marcas</h1>
       <BotonAgregar as={Link} to="/AdmMarcas/FormMarca">Nuevo</BotonAgregar>
-      
+
       <Table>
         <thead>
           <Tr>
@@ -102,10 +56,10 @@ const AdmMarcas = () => {
         {marcas
           .map((marca) => (
             <Tr key={marca.idMarca}>
-              <Td>{marca.idMarca}</Td>
+              <Td><a href={`/AdmMarcas/FormMarcaModificar/${marca.idMarca}`}>{marca.idMarca}</a></Td>
               <Td>{marca.nombreMarca}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(marca.id)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(marca.idMarca)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}
@@ -116,7 +70,6 @@ const AdmMarcas = () => {
 };
 
 export default AdmMarcas;
-
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes
 const StyledInput = styled.input`

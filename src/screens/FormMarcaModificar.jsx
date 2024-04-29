@@ -1,16 +1,32 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect  } from 'react';
+import { Link, useParams} from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormMarca = () => {
+const FormMarcaModificar = () => {
   const [marca, setMarca] = useState({nombreMarca: ''});
+  const {idMarca} = useParams();
 
+  const cargarMarca = () => {
+    if (!idMarca) {
+      console.error("No hay ID de Marca proporcionado");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/marcas/${idMarca}`)
+      .then(response => response.json())
+      .then(data => {
+        setMarca(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
+useEffect(() => {
+    cargarMarca();
+  }, []);
+  
   const handleChange = (e) => {
     setMarca({ ...marca, [e.target.name]: e.target.value });
   };
-  
   const handleSubmit = (e) => {
     e.preventDefault();
   
@@ -19,46 +35,39 @@ const FormMarca = () => {
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarMarca = (url, marcaData) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(marcaData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+    const modificarMarca = (marcaData) => {
+        return fetch(`http://127.0.0.1:3001/marcas/${idMarca}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(marcaData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
+      };
+    
+      // Construir objeto con datos del cliente a modificar
+      const datosMarca = {
+        nombreMarca: marca.nombreMarca,
+      };
+    
+      // Intentar modificar el cliente en la base de datos
+      modificarMarca(datosMarca)
+        .then(data => {
+          console.log('Marca modificada con éxito:', data);
+          alert('Marca modificada con éxito');
+          
+        })
+        .catch(error => {
+          console.error('Error al modificar la marca:', error);
+          alert('Error al modificar la marca: ' + error.message);
+        });
     };
-  
-
-    const datosMarca = {
-      nombreMarca: marca.nombreMarca,
-    }
-    // Primero intentar insertar en SQL Server
-    insertarMarca('http://127.0.0.1:3001/marcas', datosMarca)
-    .then(data => {
-      console.log('Marca agregada en MySQL:', data);
-      alert('Marca agregada con éxito.');
-      resetForm(); 
-      console.log('Marca agregado en SQL Server:', data);
-    })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar la marca. ' + error.message);
-      });
-  };
-  
-  
-
-
-const resetForm = () => {
-    setMarca({ nombreMarca: ''});
-};
 
 
   return (
@@ -85,7 +94,7 @@ const resetForm = () => {
   );
 };
 
-export default FormMarca;
+export default FormMarcaModificar;
 
 const ContenedorTabla = styled.div`
   padding:50px;

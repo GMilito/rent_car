@@ -4,28 +4,30 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormMarca = () => {
-  const [marca, setMarca] = useState({nombreMarca: ''});
+const FormSeguro = () => {
+  const [seguro, setSeguros] = useState({tipoSeguro: '', montoSeguro: ''});
+
+
 
   const handleChange = (e) => {
-    setMarca({ ...marca, [e.target.name]: e.target.value });
+    setSeguros({ ...seguro, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!marca.nombreMarca )  {
+    if (!seguro.tipoSeguro || !seguro.montoSeguro )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarMarca = (url, marcaData) => {
+    const insertarSeguro = (url, seguroData) => {
       return fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(marcaData)
+        body: JSON.stringify(seguroData)
       })
       .then(response => {
         if (!response.ok) {
@@ -36,48 +38,52 @@ const FormMarca = () => {
     };
   
 
-    const datosMarca = {
-      nombreMarca: marca.nombreMarca,
+    const datosSeguro = {
+      tipoSeguro: seguro.tipoSeguro,
+      montoSeguro: seguro.montoSeguro
     }
     // Primero intentar insertar en SQL Server
-    insertarMarca('http://127.0.0.1:3001/marcas', datosMarca)
-    .then(data => {
-      console.log('Marca agregada en MySQL:', data);
-      alert('Marca agregada con éxito.');
-      resetForm(); 
-      console.log('Marca agregado en SQL Server:', data);
-    })
+    insertarSeguro('http://127.0.0.1:3001/seguro', datosSeguro)
+      .then(data => {
+        console.log('Seguro agregado en MySQL:', data);
+        alert('Seguro agregado con éxito.');
+        resetForm(); 
+        console.log('Seguro agregado en SQL Server:', data);
+      })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al agregar la marca. ' + error.message);
+        alert('Error al agregar el Seguro. ' + error.message);
       });
   };
-  
-  
-
-
 const resetForm = () => {
-    setMarca({ nombreMarca: ''});
+    setSeguros({tipoSeguro: '', montoSeguro: ''});
 };
-
-
   return (
     <ContenedorTabla>
-      <h1>Crear marca</h1>
+      <h1>Crear Seguro</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-          <StyledLabel>Nombre:</StyledLabel>
+          <StyledLabel>Tipo:</StyledLabel>
           <StyledInput
             type="text"
-            name="nombreMarca"
-            value={marca.nombreMarca}
+            name="tipoSeguro"
+            value={seguro.tipoSeguro}
             onChange={handleChange}
-            placeholder="Nombre Marca"
+            placeholder="Tipo Seguro"
+            required
+          />
+          <StyledLabel>Monto:</StyledLabel>
+          <StyledInput
+            type="text"
+            name="montoSeguro"
+            value={seguro.montoSeguro}
+            onChange={handleChange}
+            placeholder="Monto Seguro"
             required
           />
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmMarcas">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to="/AdmSeguro">Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>
@@ -85,7 +91,9 @@ const resetForm = () => {
   );
 };
 
-export default FormMarca;
+export default FormColor;
+
+
 
 const ContenedorTabla = styled.div`
   padding:50px;

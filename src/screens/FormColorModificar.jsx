@@ -8,6 +8,7 @@ const FormColorModificar = () => {
 
   const [color, setColor] = useState({nombreColor: ''});
   const {idColor} = useParams(); //poner use params
+  
   const cargarColor = () => {
     if (!idColor) {
       console.error("No hay ID de Color proporcionado");

@@ -4,72 +4,111 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const AdmColores = () => {
-  const [colores, setColores] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
-  const cargarColores = () => {
-    fetch('http://127.0.0.1:3001/color')
+
+
+const AdmSeguro = () => {
+  const [seguros, setSeguros] = useState([]);
+
+  const cargarSeguros = () => {
+    fetch('http://127.0.0.1:3001/seguros')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
-        setColores(data);
+        setSeguros(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
   };
   useEffect(() => {
-    cargarColores();
+    cargarSeguros();
   }, []);
- 
 
-
-  const handleDelete = async (idColor) => {
+  const handleDelete = async (idSeguro) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     
     if (!confirmar) {
       return;
     }
-    
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/color/${idColor}`;
+      const url = `http://127.0.0.1:3001/seguro/${idSeguro}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
-      
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Color eliminado:', data.message);
-    
+      console.log('Seguro eliminado:', data.message);
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setColores(prevColores=> prevColores.filter(color => color.idColor !== idColor));
+      setSeguros(prevSeguros => prevSeguros.filter(seguro => seguro.idSeguro !== idSeguro));
     } catch (error) {
-      console.error('Error al eliminar el color:', error);
-      alert(`Error al eliminar el cliente: ${error.message}`);
+      console.error('Error al eliminar el Seguro:', error);
+      alert(`Error al eliminar el seguro: ${error.message}`);
     }
   };
   
-
+  /*NO BORRAR SE CAE
+  const handleActualizarCliente = (clienteActualizado) => {
+    // Función auxiliar para realizar la actualización en una base de datos
+    const actualizarEnBaseDeDatos = (url) => {
+      return fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(clienteActualizado),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al actualizar el cliente');
+        }
+        return response.json();
+      });
+    };
+  
+    // Actualizar en SQL Server
+    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${clienteActualizado.id}`)
+      .then(() => {
+        console.log('Cliente actualizado en SQL Server');
+        
+      })
+      .catch(error => console.error('Error al actualizar en SQL Server:', error));
+  
+    // Actualizar en MySQL
+    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${clienteActualizado.id}`)
+      .then(() => {
+        console.log('Cliente actualizado en MySQL');
+        
+      })
+      .catch(error => console.error('Error al actualizar en MySQL:', error));
+  
+    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
+    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
+    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
+    const clientesActualizados = [...clientes];
+    clientesActualizados[indice] = clienteActualizado;
+    setClientes(clientesActualizados);
+  };
+  
+*/
   return (
-    
     <ContenedorTabla>
-      <h1>Administación de colores</h1>
-      <BotonAgregar as={Link} to="/AdmColores/FormColor">Nuevo</BotonAgregar>
-      <br></br>
+      <h1>Administación de Seguros</h1>
+      <BotonAgregar as={Link} to="/AdmSeguro/FormSeguro">Nuevo</BotonAgregar>
       <Table>
-      
         <thead>
           <Tr>
             <Th>ID</Th>
             <Th>Nombre</Th>
+            <Th>Monto</Th>
             <Th></Th>
           </Tr>
         </thead>
         <tbody>
-        {colores
-          .map((color) => (
-            <Tr key={color.idColor}>
-               <Td><a href={`/AdmColores/FormColorModificar/${color.idColor}`}>{color.idColor}</a></Td>
-              <Td>{color.nombreColor}</Td>
+        {seguros
+          .map((seguro) => (
+            <Tr key={seguro.idSeguro}>
+              <Td>{seguro.idSeguro}</Td>
+              <Td>{seguro.tipoSeguro}</Td>
+              <Td>{seguro.montoSeguro}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(color.idColor)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(seguro.idSeguro)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}
@@ -79,7 +118,7 @@ const AdmColores = () => {
   );
 };
 
-export default AdmColores;
+export default AdmSeguro;
 
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes
