@@ -6,14 +6,14 @@ import styled from 'styled-components';
 
 const FormTipoVehiculoModificar = () => {
   const [tipoVehiculo, setTipoVehiculo] = useState({nombre: '', montoPorHora: ''});
-  const {idTipoVehiculo}= useParams()
+  const {idTipo}= useParams()
 
   const cargarTipoVehiculo = () => {
-    if (!tipoVehiculo) {
+    if (!idTipo) {
       console.error("No hay ID tipo de vehiculo  proporcionado");
       return;
     }
-    fetch(`http://127.0.0.1:3001/tipoVehiculo/${idTipoVehiculo}`)
+    fetch(`http://127.0.0.1:3001/tipoVehiculo/${idTipo}`)
       .then(response => response.json())
       .then(data => {
         setTipoVehiculo(data);
@@ -37,7 +37,7 @@ useEffect(() => {
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
     const modificarTipoVehiculo = (tipoData) => {
-        return fetch(`http://127.0.0.1:3001/tipoVehiculo/${idTipoVehiculo}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+        return fetch(`http://127.0.0.1:3001/tipoVehiculo/${idTipo}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
