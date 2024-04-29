@@ -17,7 +17,6 @@ import AdmPaisResidencia from './screens/AdmPaisResidencia';
 import FormPaisResidencia from './screens/FormPaisResidencia';
 import AdmCombustibles from './screens/AdmCombustibles';
 import FormCombustible from './screens/FormCombustible';
-
 import Catalogos from './screens/Catalogos';
 
 
