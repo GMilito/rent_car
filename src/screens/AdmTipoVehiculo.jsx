@@ -25,7 +25,7 @@ const AdmTipoVehiculo = () => {
     if (!confirmar) { 
       return;
     }
-    
+    console.log(idTipoVehiculo);
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
       const url = `http://127.0.0.1:3001/tipoVehiculo/${idTipoVehiculo}`;
@@ -36,7 +36,7 @@ const AdmTipoVehiculo = () => {
       console.log('Tipo de Vehiculo eliminado:', data.message);
     
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setTipoVehiculos(prevTipoVehiculos=> prevTipoVehiculos.filter(tipoVehiculo => tipoVehiculo.idTipoVehiculo !== idTipoVehiculo));
+      setTipoVehiculos(prevTipoVehiculos=> prevTipoVehiculos.filter(tipoVehiculo => tipoVehiculo.idTipo !== idTipoVehiculo));
     } catch (error) {
       console.error('Error al eliminar el tipo de vehiculo:', error);
       alert(`Error al eliminar el tipo de vehiculo: ${error.message}`);
@@ -62,11 +62,11 @@ const AdmTipoVehiculo = () => {
         {tipoVehiculos
           .map((tipoVehiculo) => (
             <Tr key={tipoVehiculo.idTipo}>
-              <Td><a href={`/AdmTipoVehiculo/FormTipoVehiculoModificar/${tipoVehiculo.idTipoVehiculo}`}>{tipoVehiculo.idTipoVehiculo}</a></Td>
+              <Td><a href={`/AdmTipoVehiculo/FormTipoVehiculoModificar/${tipoVehiculo.idTipo}`}>{tipoVehiculo.idTipo}</a></Td>
               <Td>{tipoVehiculo.nombre}</Td>
               <Td>{tipoVehiculo.montoPorHora}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(tipoVehiculo.idTipoVehiculo)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(tipoVehiculo.idTipo)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}
