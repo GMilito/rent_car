@@ -63,7 +63,7 @@ const resetForm = () => {
           <StyledLabel>Nombre:</StyledLabel>
           <StyledInput
             type="text"
-            name="nombretipoTransmision"
+            name="tipoTransmision"
             value={transmision.tipoTransmision}
             onChange={handleChange}
             placeholder="Nombre Transmision"
