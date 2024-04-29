@@ -19,6 +19,10 @@ const links = [
     name : "Colores",
     href : "/AdmColores",
   },
+  {
+  name : "Marcas",
+  href : "/AdmMarcas",
+  },
 ]
 
 
