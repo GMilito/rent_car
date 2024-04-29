@@ -10,6 +10,7 @@ import Login from './screens/Login';
 import FormColor from './screens/FormColor';
 import AdmMarcas from './screens/AdmMarcas';
 import FormMarca from './screens/FormMarca';
+import FormMarcaModificar from './screens/FormMarcaModificar';
 
 import {
   BrowserRouter as Router,
@@ -25,7 +26,7 @@ import Principal from './screens/Principal';
 import FormVehiculo from './screens/FormVehiculo';
 import FormVehiculoModificar from './screens/FormVehiculoModificar';
 import FormColorModificar from './screens/FormColorModificar';
-import FormMarcaModificar from './screens/FormMarcaModificar';
+
 
 function AppWrapper() {
   const location = useLocation();
@@ -39,7 +40,6 @@ function AppWrapper() {
           <Route path='/login' element={<Login/>} />
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
-          <Route path='/Alquileres' element={<Alquileres/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
           <Route path='/AdmColores' element={<AdmColores/>} />
           <Route path='/AdmColores/FormColor' element={<FormColor/>} />

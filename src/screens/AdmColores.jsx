@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-
-
 const AdmColores = () => {
   const [colores, setColores] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes

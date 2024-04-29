@@ -132,7 +132,7 @@ const AdmAlquiler = () => {
   );
 };
 
-export default AdmClientes;
+export default AdmAlquiler;
 
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes

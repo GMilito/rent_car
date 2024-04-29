@@ -38,57 +38,12 @@ const AdmMarcas = () => {
     }
   };
   
-
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
       <h1>Administación de marcas</h1>
       <BotonAgregar as={Link} to="/AdmMarcas/FormMarca">Nuevo</BotonAgregar>
-      
+
       <Table>
         <thead>
           <Tr>

@@ -7,8 +7,9 @@ import styled from 'styled-components';
 const FormMarcaModificar = () => {
   const [marca, setMarca] = useState({nombreMarca: ''});
   const {idMarca} = useParams();
+
   const cargarMarca = () => {
-    if (!idColor) {
+    if (!idMarca) {
       console.error("No hay ID de Marca proporcionado");
       return;
     }
@@ -22,10 +23,10 @@ const FormMarcaModificar = () => {
 useEffect(() => {
     cargarMarca();
   }, []);
+  
   const handleChange = (e) => {
     setMarca({ ...marca, [e.target.name]: e.target.value });
   };
-  
   const handleSubmit = (e) => {
     e.preventDefault();
   
