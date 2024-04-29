@@ -54,6 +54,7 @@ useEffect(() => {
       // Construir objeto con datos del cliente a modificar
       const datosTipoVehiculo = {
         nombre: tipoVehiculo.nombre,
+        montoPorHora:tipoVehiculo.montoPorHora
       };
       // Intentar modificar el cliente en la base de datos
       modificarTipoVehiculo(datosTipoVehiculo)
