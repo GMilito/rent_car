@@ -1,11 +1,29 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormTransmision = () => {
+const FormTransmisionModificar = () => {
   const [transmision, setTransmision] = useState({tipoTransmision: ''});
+  const {idTransmision} = useParams(); //poner use params
+
+
+  const cargarTransmision = () => {
+    if (!idTransmision) {
+      console.error("No hay ID de transmision proporcionado");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/transmision/${idTransmision}`)
+      .then(response => response.json())
+      .then(data => {
+        setTransmision(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
+useEffect(() => {
+    cargarTransmision();
+  }, []);
 
   const handleChange = (e) => {
     setTransmision({ ...transmision, [e.target.name]: e.target.value });
@@ -18,43 +36,39 @@ const FormTransmision = () => {
       console.error('Todos los campos son obligatorios');
       return;
     }
-    // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarTransmision = (url, marcaTransmision) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(marcaTransmision)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+    const modificarTransmision = (TransmisionData) => {
+        return fetch(`http://127.0.0.1:3001/transmision/${idTransmision}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(TransmisionData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
+      };
+    
+      // Construir objeto con datos del cliente a modificar
+      const datosTransmision = {
+        tipoTransmision: transmision.tipoTransmision,
+      };
+    
+      // Intentar modificar el cliente en la base de datos
+      modificarTransmision(datosTransmision)
+        .then(data => {
+          console.log('Transmision modificado con éxito:', data);
+          alert('Transmision modificado con éxito');
+          
+        })
+        .catch(error => {
+          console.error('Error al modificar el transmision:', error);
+          alert('Error al modificar el transmision: ' + error.message);
+        });
     };
-  
-
-    const datosTransmision= {
-      tipoTransmision: transmision.tipoTransmision,
-    }
-    // Primero intentar insertar en SQL Server
-    insertarTransmision('http://127.0.0.1:3001/transmision', datosTransmision)
-    .then(data => {
-      console.log('Marca agregada en MySQL:', data);
-      alert('Marca agregada con éxito.');
-      resetForm(); 
-      console.log('Marca agregado en SQL Server:', data);
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el la marca. ' + error.message);
-      });
-  };
-const resetForm = () => {
-    setTransmision({ tipoTransmision: ''});
-};
   return (
     <ContenedorTabla>
       <h1>Crear transmision</h1>
@@ -78,7 +92,7 @@ const resetForm = () => {
     </ContenedorTabla>
   );
 };
-export default FormTransmision;
+export default FormTransmisionModificar;
 
 const ContenedorTabla = styled.div`
   padding:50px;
