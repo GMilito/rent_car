@@ -4,75 +4,24 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormVehiculo = () => {
-    const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: 'Disponible', idTransmision: '' });
-    const [colores, setColores] = useState([])
-    const [combustibles, setCombustibles] = useState([])
-    const [transmisiones, setTransmisiones] = useState([])
-    const [marcas, setMarcas] = useState([])
-    const [tipoVehiculos, setTipoVehiculos] = useState([])
-
-    const cargarColores = () => {
-        fetch('http://127.0.0.1:3001/color')
-            .then(response => response.json())
-            .then(data => {
-                setColores(data);
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarCombustible = () => {
-        fetch('http://127.0.0.1:3001/combustible')
-            .then(response => response.json())
-            .then(data => {
-                setCombustibles(data);
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarTransmisiones = () => {
-        fetch('http://127.0.0.1:3001/transmision')
-            .then(response => response.json())
-            .then(data => {
-                setTransmisiones(data);
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarMarcas = () => {
-        fetch('http://127.0.0.1:3001/marca')
-            .then(response => response.json())
-            .then(data => {
-                setMarcas(data);
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarTipoVehiculo = () => {
-        fetch('http://127.0.0.1:3001/tipoVehiculo')
-            .then(response => response.json())
-            .then(data => {
-                setTipoVehiculos(data);
-            })
-            .catch(error => console.error("Error al obtener los datos:", error));
-    };
+const FormAlquiler = () => {
+    const [alquiler, setAlquiler] = useState([]);
+    const [filtroCedula, setFiltroCedula] = useState('');
 
 
-    useEffect(() => {
 
-        cargarColores();
-        cargarCombustible();
-        cargarTransmisiones();
-        cargarMarcas();
-        cargarTipoVehiculo();
-    }, []);
+
 
 
 
     const handleChange = (e) => {
-        setVehiculo({ ...vehiculo, [e.target.name]: e.target.value });
+        setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!vehiculo.idTipoVehiculo || !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca || !vehiculo.estado || !vehiculo.idTransmision) {
+        if (!alquiler.idCliente || !alquiler.fechaEntrega || !alquiler.horaEntrega || !alquiler.idSeguro ) {
             console.error('Todos los campos son obligatorios');
             return;
         }
@@ -96,18 +45,15 @@ const FormVehiculo = () => {
         };
 
 
-        const datosVehiculo = {
-            idTipoVehiculo: vehiculo.idTipoVehiculo,
-            idColor: vehiculo.idColor,
-            idCombustible: vehiculo.idCombustible,
-            año: vehiculo.año,
-            idMarca: vehiculo.idMarca,
-            estado: 'Disponible',
-            idTransmision: vehiculo.idTransmision,
+        const datosAlquiler = {
+            idCliente: alquiler.idTipoVehiculo,
+            fechaEntrega: alquiler.idColor,
+            horaEntrega : alquiler.horaEntrega,
+            idSeguro: alquiler.idCombustible,
         };
 
         // Primero intentar insertar en SQL Server
-        insertarVehiculo('http://127.0.0.1:3001/vehiculos', datosVehiculo)
+        insertarVehiculo('http://127.0.0.1:3001/vehiculos', datosAlquiler)
             .then(data => {
                 console.log('Vehiculo agregado en SQL Server:', data);
                 alert('Vehiculo agregado con éxito');
@@ -129,7 +75,7 @@ const FormVehiculo = () => {
 
     return (
         <ContenedorTabla>
-            <h1>Crear Vehiculo</h1>
+            <h1>Crear Alquiler</h1>
             <FormContainer>
                 <StyledForm onSubmit={handleSubmit}>
                     <StyledLabel>Cliente:</StyledLabel>
@@ -143,7 +89,7 @@ const FormVehiculo = () => {
                     />
                     <StyledSelect
                         name="idCliente"
-                        value={tarjeta.idCliente}
+                        value={alquiler.idCliente}
                         onChange={handleChange}
                         required
                     >
@@ -159,48 +105,35 @@ const FormVehiculo = () => {
                     <StyledLabel>Fecha Entrega:</StyledLabel>
                     <StyledInput
                         type="date"
-                        name="fecha"
-                        value={vehiculo.año}
+                        name="fechaEntrega"
+                        value={alquiler.fechaEntrega}
                         onChange={handleChange}
                         placeholder="Fecha Entrega"
                         required
                     />
                     <StyledInput
                         type="time"
-                        name="año"
-                        value={vehiculo.año}
+                        name="horaEntrega"
+                        value={alquiler.horaEntrega}
                         onChange={handleChange}
                         placeholder="Hora Entrega"
                         required
                     />
-                    <StyledLabel>Marca:</StyledLabel>
+                    <StyledLabel>Seguro:</StyledLabel>
                     <StyledSelect
-                        name="idMarca"
-                        value={vehiculo.idMarca}
+                        name="idSeguro"
+                        value={alquiler.idSeguro}
                         onChange={handleChange}
                         required
                     >
-                        <option value="">Seleccione una marca</option>
-                        {marcas
-                            .map((tv) => (
-                                <option value={tv.idMarca}>{tv.nombreMarca}</option>
+                        <option value="">Seleccione un Seguro</option>
+                        {clientes
+                            .map(cliente => (
+                                <option key={cliente.idCliente} value={cliente.idCliente}>
+                                    {`${cliente.cedula} - ${cliente.nombreCliente} ${cliente.apellidoCliente}`}
+                                </option>
                             ))}
                     </StyledSelect>
-
-                    <StyledLabel>Transmision:</StyledLabel>
-                    <StyledSelect
-                        name="idTransmision"
-                        value={vehiculo.idTransmision}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="">Seleccione un tipo</option>
-                        {transmisiones
-                            .map((tv) => (
-                                <option value={tv.idTransmision}>{tv.tipoTransmision}</option>
-                            ))}
-                    </StyledSelect>
-
                     <ContenedorBotones>
                         <BotonAgregar type="submit">Guardar</BotonAgregar>
                         <BotonCancelar as={Link} to="/AdmVehiculos">Cancelar</BotonCancelar>
@@ -211,7 +144,7 @@ const FormVehiculo = () => {
     );
 };
 
-export default FormVehiculo;
+export default FormAlquiler;
 
 
 
