@@ -7,7 +7,7 @@ const AdmPaisResidencia = () => {
   const [paises, setPaises] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarPaises = () => {
-    fetch('http://127.0.0.1:3001/paises-sql')
+    fetch('http://127.0.0.1:3001/pais')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -18,14 +18,14 @@ const AdmPaisResidencia = () => {
   useEffect(() => {
     cargarPaises();
   }, []);
-   const handleDelete = async (id) => {
+   const handleDelete = async (idPais) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     if (!confirmar) {
       return;
     }
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/paises/${idPais}`;
+      const url = `http://127.0.0.1:3001/pais/${idPais}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
@@ -38,51 +38,6 @@ const AdmPaisResidencia = () => {
       alert(`Error al eliminar el pais: ${error.message}`);
     }
   };
-
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
@@ -100,10 +55,10 @@ const AdmPaisResidencia = () => {
         {paises
           .map((pais) => (
             <Tr key={pais.idPais}>
-              <Td>{pais.idPais}</Td>
+               <Td><a href={`/AdmPaisResidencia/FormPaisModificar/${pais.idPais}`}>{pais.idPais}</a></Td>
               <Td>{pais.nombrePais}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(pais.id)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(pais.idPais)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}

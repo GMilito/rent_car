@@ -11,9 +11,6 @@ import FormColor from './screens/FormColor';
 import Alquileres from './screens/Alquileres';
 import AdmAlquileresActivos from './screens/AdmAlquileresActivos';
 import AdmHistorialAlquileres from './screens/AdmHistorialAlquileres';
-import AdmMarcas from './screens/AdmMarcas'
-import FormMarca from './screens/FormMarca'
-import FormMarcaModificar from './screens/FormMarcaModificar'
  import {
   BrowserRouter as Router,
   Routes,
@@ -28,6 +25,9 @@ import Principal from './screens/Principal';
 import FormVehiculo from './screens/FormVehiculo';
 import FormVehiculoModificar from './screens/FormVehiculoModificar';
 import FormColorModificar from './screens/FormColorModificar';
+import FormMarcaModificar from './screens/FormMarcaModificar';
+import FormPaisModificar from './screens/FormPaisModificar';
+
 
 
 function AppWrapper() {
@@ -57,6 +57,9 @@ function AppWrapper() {
           <Route path="/AdmMarcas" element={<AdmMarcas/>} />
           
           <Route path="/AdmMarcas/FormMarcaModificar/:idMarca" element={<FormMarcaModificar/>} />
+          <Route path="/AdmPaisResidencia" element={<AdmPaisResidencia/>} />
+          <Route path="/AdmPaisResidencia/FormPaisResidencia" element={<FormPaisResidencia/>} />
+          <Route path="/AdmPaisResidencia/FormPaisModificar/:idPais" element={<FormPaisModificar/>}/>
       </Routes>
     </div>
   );
