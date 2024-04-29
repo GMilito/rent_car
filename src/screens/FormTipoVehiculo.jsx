@@ -67,7 +67,7 @@ const resetForm = () => {
             name="nombre"
             value={tipoVehiculo.nombre}
             onChange={handleChange}
-            placeholder="Nombre Color"
+            placeholder="Nombre Tipo"
             required
           />
           <StyledLabel>Monto Por hora:</StyledLabel>
