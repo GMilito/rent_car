@@ -16,17 +16,10 @@ const links = [
     href : "/Alquileres",
   },
   {
-    name : "Colores",
-    href : "/AdmColores",
+    name : "Catalogos",
+    href : "/Catalogos",
   },
-  {
-  name : "Marcas",
-  href : "/AdmMarcas",
-  },
-  {
-    name : "Paises",
-    href : "/AdmPaisResidencia",
-    },
+
 ]
 
 const NavBar = () => {
@@ -73,7 +66,7 @@ const NavContainer = styled.nav`
     display: flex;
     align-items: center;
    
-    justify-content:
+    justify-content: center;
   }
   
 

@@ -15,7 +15,7 @@ import AdmMarcas from './screens/AdmMarcas';
 import FormMarca from './screens/FormMarca';
 import AdmPaisResidencia from './screens/AdmPaisResidencia';
 import FormPaisResidencia from './screens/FormPaisResidencia';
-
+import Catalogos from './screens/Catalogos';
  import {
   BrowserRouter as Router,
   Routes,
@@ -46,6 +46,7 @@ function AppWrapper() {
           <Route path='/login' element={<Login/>} />
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
+          <Route path='/Catalogos' element={<Catalogos/>} />
           <Route path='/Alquileres' element={<Alquileres/>} />
           <Route path='/Alquileres/AdmAlquileresActivos' element={<AdmAlquileresActivos/>} />
           <Route path='/Alquileres/AdmHistorialAlquileres' element={<AdmHistorialAlquileres/>} />

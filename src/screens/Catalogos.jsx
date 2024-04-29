@@ -6,17 +6,17 @@ import tarjetas from '../img/tarjetas.webp';
 import usuarios from '../img/usuarios.webp';
 import { Link } from 'react-router-dom';
 
-const Alquileres = () => {
+const Catalogos = () => {
   return (
     <ContenedorPrincipal>
       <ContenedorTitulo>
 
-        <h2>Alquileres</h2>
+        <h2>Catalogos</h2>
 
       </ContenedorTitulo>
       <Contenedor>
         
-      <BotonAgregar as={Link} to="/Alquileres/FormAlquiler">Nuevo Alquiler</BotonAgregar>
+      <BotonAgregar as={Link} to="/AdmColores">Colores</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmAlquileresActivos">Ver Alquileres Activos</BotonAgregar>
         <br></br>
@@ -31,7 +31,7 @@ const Alquileres = () => {
   )
 }
 
-export default Alquileres
+export default Catalogos
 
 const BotonNavegar = styled.button`
   background-color: #273352; 
