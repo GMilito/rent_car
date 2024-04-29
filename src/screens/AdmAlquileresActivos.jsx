@@ -59,7 +59,11 @@ const AdmDetallesAlquiler = () => {
                     </tbody>
                 </Table>
             ) : (
+              <div>
                 <div>No hay alquileres activos.</div>
+                <br />
+                <BotonCancelar as={Link} to="/Alquileres">Regresar</BotonCancelar>
+              </div>                
             )}
         </ContenedorTabla>
     );
@@ -189,5 +193,15 @@ const Tr = styled.tr`
   &:nth-child(even) {
     background-color: #f9f9f9;
     border-bottom: 1px solid #7c7c7c inherit;
+  }
+`;
+
+
+const BotonCancelar = styled(BotonAccion)`
+  background-color: #FF6347; 
+  color: white;
+
+  &:hover {
+    background-color: #E55347; 
   }
 `;

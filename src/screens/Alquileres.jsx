@@ -16,13 +16,13 @@ const Alquileres = () => {
       </ContenedorTitulo>
       <Contenedor>
         
-      <BotonAgregar as={Link} to="/Alquileres/FormAlquiler">Nuevo Alquiler</BotonAgregar>
+      <BotonAgregar as={Link} to="/AdmVehiculos">Nuevo Alquiler</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmAlquileresActivos">Ver Alquileres Activos</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmHistorialAlquileres">Ver Historial de Alquileres</BotonAgregar>
         <br></br>
-        <BotonAgregar as={Link} to="/Alquileres/Devoluciones">Devoluciones</BotonAgregar>
+        <BotonAgregar as={Link} to="/AdmVehiculos">Devoluciones</BotonAgregar>
         <br></br>
 
       </Contenedor>

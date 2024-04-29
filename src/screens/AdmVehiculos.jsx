@@ -25,7 +25,7 @@ const AdmVehiculos = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarCombustible = () => {
-    fetch('http://127.0.0.1:3001/combustible')
+    fetch('http://127.0.0.1:3001/combustibles')
       .then(response => response.json())
       .then(data => {
         setCombustibles(data);
@@ -41,7 +41,7 @@ const AdmVehiculos = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarMarcas = () => {
-    fetch('http://127.0.0.1:3001/marca')
+    fetch('http://127.0.0.1:3001/marcas')
       .then(response => response.json())
       .then(data => {
         setMarcas(data);
@@ -151,6 +151,13 @@ const AdmVehiculos = () => {
                   <Td>{vehiculo.año}</Td>
                   <Td>{vehiculo.estado}</Td>
                   <Td>
+                    {vehiculo.estado == 'Disponible' ? (
+                      <BotonAlquilar as={Link} to="/AdmVehiculos/FormAlquiler">Alquilar</BotonAlquilar>
+                    ) : (
+
+                      <BotonDevolver as={Link} to="/AdmVehiculos/Devoluciones">Devolver</BotonDevolver>
+
+                    )}
                     <BotonAccionEliminar onClick={() => handleDelete(vehiculo.idVehiculo)}>Eliminar</BotonAccionEliminar>
                   </Td>
                 </Tr>
@@ -190,7 +197,30 @@ const BotonAccion = styled.button`
     opacity: 0.8;
   }
 `;
+const BotonCancelar = styled(BotonAccion)`
+  background-color: #FF6347; 
+  color: white;
 
+  &:hover {
+    background-color: #E55347; 
+  }
+`;
+const BotonAlquilar = styled(BotonAccion)`
+  background-color: #4CAF50; 
+  color: white;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+const BotonDevolver = styled(BotonAccion)`
+  background-color: #8a0a6e; 
+  color: white;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
 const BotonAccionEliminar = styled(BotonAccion)`
   background-color: #FF6347; /* Rojo */
   color: white;

@@ -35,7 +35,7 @@ const AdmClientes = () => {
     .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarPaises = () => {
-    fetch('http://127.0.0.1:3001/paises')
+    fetch('http://127.0.0.1:3001/pais')
     .then(response => response.json())
     .then(data => {
       setPaises(data);

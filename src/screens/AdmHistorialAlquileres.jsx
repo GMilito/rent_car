@@ -7,7 +7,7 @@ const AdmDetallesAlquiler = () => {
   const [detallesAlquileres, setDetallesAlquileres] = useState([]);
 
   const cargarDetallesAlquileres = () => {
-    fetch('http://127.0.0.1:3001/detallesAlquileres-sql')
+    fetch('http://127.0.0.1:3001/alquilerDetalles')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -30,20 +30,33 @@ const AdmDetallesAlquiler = () => {
       <Table>
         <thead>
           <Tr>
-            <Th>ID detalle</Th>
             <Th>ID Alquiler</Th>
-            <Th>Fecha devolucion</Th>
+            <Th>Cliente</Th>
+            <Th>Fecha Alquiler</Th>
+            <Th>Fecha Entrega</Th>
+            <Th>Vehiculo</Th>
+            <Th>Usuario</Th>
+            <Th>Monto Inicial</Th>
+            <Th>Seguro</Th>
+            <Th>Fecha Devolucion</Th>
             <Th>Monto Total</Th>
-           
           </Tr>
         </thead>
         <tbody>
         {detallesAlquileres
           .map((detalleAlquiler) => (
-            <Tr key={detalleAlquiler.idDetallesAlquiler}>
+            <Tr key={detalleAlquiler.idAlquiler}>
               <Td>{detalleAlquiler.idAlquiler}</Td>
+              <Td>{detalleAlquiler.idCliente}</Td>
+              <Td>{detalleAlquiler.fechaAlquiler}</Td>
+              <Td>{detalleAlquiler.fechaEntrega}</Td>
+              <Td>{detalleAlquiler.idVehiculo}</Td>
+              <Td>{detalleAlquiler.idUsuario}</Td>
+              <Td>{detalleAlquiler.monto}</Td>
+              <Td>{detalleAlquiler.idSeguro}</Td>
+           
               <Td>{detalleAlquiler.fechaDevolucion}</Td>
-              <Td>{detalleAlquiler.montoTotal}</Td>
+              <Td>{detalleAlquiler.montoTotal + detalleAlquiler.monto}</Td>
             </Tr>
         ))}
         </tbody>
