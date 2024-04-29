@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -9,6 +9,7 @@ const FormAlquiler = () => {
     const [clientes, setClientes] = useState([]);
     const [seguros, setSeguros] = useState([]);
     const [filtroCedula, setFiltroCedula] = useState('');
+    const {idVehiculo} = useParams();
 
     const cargarClientes = () => {
         fetch('http://127.0.0.1:3001/clientes')
@@ -19,8 +20,19 @@ const FormAlquiler = () => {
             })
             .catch(error => console.error("Error al obtener los datos:", error));
     };
+
+    const cargarSeguros = () => {
+        fetch('http://127.0.0.1:3001/seguros')
+            .then(response => response.json())
+            .then(data => {
+                setSeguros(data);
+            })
+            .catch(error => console.error("Error al obtener los datos:", error));
+    };
+
     useEffect(() => {
         cargarClientes();
+        cargarSeguros();
     }, []);
 
     const handleChange = (e) => {
@@ -40,8 +52,6 @@ const FormAlquiler = () => {
             return;
         }
 
-
-        // Definir una función auxiliar para insertar el cliente en una base de datos
         const insertarAlquiler = (url, vehiculoData) => {
             return fetch(url, {
                 method: 'POST',
@@ -60,14 +70,15 @@ const FormAlquiler = () => {
 
 
         const datosAlquiler = {
-            idCliente: alquiler.idTipoVehiculo,
-            fechaEntrega: alquiler.idColor,
+            idCliente: alquiler.idCliente,
+            idVehiculo: idVehiculo,
+            fechaEntrega: alquiler.fechaEntrega,
             horaEntrega: alquiler.horaEntrega,
-            idSeguro: alquiler.idCombustible,
+            idSeguro: alquiler.idSeguro,
         };
 
         // Primero intentar insertar en SQL Server
-        insertarAlquiler('http://127.0.0.1:3001/vehiculos', datosAlquiler)
+        insertarAlquiler('http://127.0.0.1:3001/realizarAlquiler', datosAlquiler)
             .then(data => {
                 console.log('Alquiler agregado en SQL Server:', data);
                 alert('Alquiler agregado con éxito');
@@ -79,13 +90,9 @@ const FormAlquiler = () => {
             });
     };
 
-
-
-
     const resetForm = () => {
         setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: '' });
     };
-
 
     return (
         <ContenedorTabla>
@@ -95,8 +102,8 @@ const FormAlquiler = () => {
                     <StyledLabel>Cliente:</StyledLabel>
                     <StyledInput
                         type="text"
-                        name="filtroCliente"
-                        placeholder="Buscar por cédula"
+                        name="filtroCedula"
+                        placeholder="Buscar por identificación"
                         value={filtroCedula}
                         onChange={handleChange}
 
@@ -142,9 +149,9 @@ const FormAlquiler = () => {
                     >
                         <option value="">Seleccione un Seguro</option>
                         {seguros
-                            .map(cliente => (
-                                <option key={cliente.idCliente} value={cliente.idCliente}>
-                                    {`${cliente.cedula} - ${cliente.nombreCliente} ${cliente.apellidoCliente}`}
+                            .map(seguro => (
+                                <option key={seguro.idSeguro} value={seguro.idSeguro}>
+                                    {`${seguro.tipoSeguro} - Monto: ${seguro.montoSeguro}$`}
                                 </option>
                             ))}
                     </StyledSelect>

@@ -42,7 +42,8 @@ const AdmDetallesAlquiler = () => {
                             <Th>Fecha Alquiler</Th>
                             <Th>Fecha Entrega</Th>
                             <Th>Vehiculo</Th>
-                            <Th>Empleado</Th>
+                            <Th>Seguro</Th>
+                            <Th>Monto</Th>
                         </Tr>
                     </thead>
                     <tbody>
@@ -53,7 +54,8 @@ const AdmDetallesAlquiler = () => {
                                 <Td>{alquiler.fechaAlquiler}</Td>
                                 <Td>{alquiler.fechaEntrega}</Td>
                                 <Td>{alquiler.idVehiculo}</Td>
-                                <Td>{alquiler.idUsuario}</Td>
+                                <Td>{alquiler.idSeguro}</Td>
+                                <Td>{alquiler.monto}$</Td>
                             </Tr>
                         ))}
                     </tbody>
