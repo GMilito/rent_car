@@ -1,85 +1,74 @@
-// En /screens/AdmClientes.js
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 
-const AdmColores = () => {
-  const [colores, setColores] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
-  const cargarColores = () => {
-    fetch('http://127.0.0.1:3001/color')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data); // Esto debería mostrar los datos en la consola
-        setColores(data);
-      })
-      .catch(error => console.error("Error al obtener los datos:", error));
-  };
-  useEffect(() => {
-    cargarColores();
-  }, []);
- 
+const AdmDetallesAlquiler = () => {
+    const [alquileres, setAlquileres] = useState([]);
+    const [error, setError] = useState(false);
+
+    const cargarAlquileres = () => {
+        fetch('http://127.0.0.1:3001/alquiler')
+            .then(response => response.json())
+            .then(data => {
+                if (Array.isArray(data)) {
+                    setAlquileres(data);
+                } else {
+                    setError(true);
+                    console.error("Error en el formato de los datos:", data);
+                }
+            })
+            .catch(error => {
+                setError(true);
+                console.error("Error al obtener los datos:", error);
+            });
+    };
+
+    useEffect(() => {
+        cargarAlquileres();
+    }, []);
 
 
-  const handleDelete = async (idColor) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    
-    if (!confirmar) {
-      return;
-    }
-    
-    try {
-      // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/color/${idColor}`;
-      const response = await fetch(url, { method: 'DELETE' });
-      const data = await response.json();
-      
-      if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Color eliminado:', data.message);
-    
-      // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setColores(prevColores=> prevColores.filter(color => color.idColor !== idColor));
-    } catch (error) {
-      console.error('Error al eliminar el color:', error);
-      alert(`Error al eliminar el cliente: ${error.message}`);
-    }
-  };
-  
+    return (
+        <ContenedorTabla>
+            <h1>Alquileres activos</h1>
+          
 
-  return (
-    
-    <ContenedorTabla>
-      <h1>Administación de colores</h1>
-      <BotonAgregar as={Link} to="/AdmColores/FormColor">Nuevo</BotonAgregar>
-      <br></br>
-      <Table>
-      
-        <thead>
-          <Tr>
-            <Th>ID</Th>
-            <Th>Nombre</Th>
-            <Th></Th>
-          </Tr>
-        </thead>
-        <tbody>
-        {colores
-          .map((color) => (
-            <Tr key={color.idColor}>
-               <Td><a href={`/AdmColores/FormColorModificar/${color.idColor}`}>{color.idColor}</a></Td>
-              <Td>{color.nombreColor}</Td>
-              <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(color.idColor)}>Eliminar</BotonAccionEliminar>
-              </Td>
-            </Tr>
-        ))}
-        </tbody>
-      </Table>
-    </ContenedorTabla>
-  );
+            {alquileres.length > 0 ? (
+                <Table>
+                    <thead>
+                        <Tr>
+                            <Th>Id Alquiler</Th>
+                            <Th>Cliente</Th>
+                            <Th>Fecha Alquiler</Th>
+                            <Th>Fecha Entrega</Th>
+                            <Th>Vehiculo</Th>
+                            <Th>Empleado</Th>
+                        </Tr>
+                    </thead>
+                    <tbody>
+                        {alquileres.map((alquiler) => (
+                            <Tr key={alquiler.idAlquiler}>
+                                <Td>{alquiler.idAlquiler}</Td>
+                                <Td>{alquiler.idCliente}</Td>
+                                <Td>{alquiler.fechaAlquiler}</Td>
+                                <Td>{alquiler.fechaEntrega}</Td>
+                                <Td>{alquiler.idVehiculo}</Td>
+                                <Td>{alquiler.idUsuario}</Td>
+                            </Tr>
+                        ))}
+                    </tbody>
+                </Table>
+            ) : (
+                <div>No hay alquileres activos.</div>
+            )}
+        </ContenedorTabla>
+    );
 };
 
-export default AdmColores;
+export default AdmDetallesAlquiler;
+
+// Continúa con los estilos como los tenías definidos...
+
 
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes

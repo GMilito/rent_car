@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 const AdmDetallesAlquiler = () => {
   const [detallesAlquileres, setDetallesAlquileres] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
+
   const cargarDetallesAlquileres = () => {
     fetch('http://127.0.0.1:3001/detallesAlquileres-sql')
       .then(response => response.json())
@@ -18,77 +18,14 @@ const AdmDetallesAlquiler = () => {
   useEffect(() => {
     cargarDetallesAlquileres();
   }, []);
-   const handleDelete = async (id) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    if (!confirmar) {
-      return;
-    }
-    try {
-      // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/detallesAlquileres/${idDetallesAlquiler}`;
-      const response = await fetch(url, { method: 'DELETE' });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Detalle de alquiler eliminado:', data.message);
-    
-      // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setDetallesAlquileres(prevDetallesAlquileres=> prevDetallesAlquileres.filter(detalleAlquiler => detalleAlquiler.idDetallesAlquiler !== idDetallesAlquiler));
-    } catch (error) {
-      console.error('Error al eliminar el detalle de alquiler:', error);
-      alert(`Error al eliminar el detalle de alquiler: ${error.message}`);
-    }
-  };
+  
   
 
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
-      <h1>Administación de detalles de alquiler</h1>
-      <BotonAgregar as={Link} to="/AdmDetallesAlquiler/FormDetalleAlquiler">Nuevo</BotonAgregar>
+      <h1>Historial de alquileres</h1>
+      
       
       <Table>
         <thead>
@@ -97,7 +34,7 @@ const AdmDetallesAlquiler = () => {
             <Th>ID Alquiler</Th>
             <Th>Fecha devolucion</Th>
             <Th>Monto Total</Th>
-            <Th></Th>
+           
           </Tr>
         </thead>
         <tbody>
@@ -107,9 +44,6 @@ const AdmDetallesAlquiler = () => {
               <Td>{detalleAlquiler.idAlquiler}</Td>
               <Td>{detalleAlquiler.fechaDevolucion}</Td>
               <Td>{detalleAlquiler.montoTotal}</Td>
-              <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(detalleAlquiler.id)}>Eliminar</BotonAccionEliminar>
-              </Td>
             </Tr>
         ))}
         </tbody>

@@ -2,7 +2,7 @@
 import './App.css';
 
 import Navbar from './components/Navbar';
-import AdmClientes from './screens/AdmClientes'; //1
+import AdmClientes from './screens/AdmClientes'; 
 import AdmVehiculos from './screens/AdmVehiculos';
 import AdmColores from './screens/AdmColores';
 import Usuarios from './screens/Usuarios';
@@ -10,8 +10,7 @@ import Login from './screens/Login';
 import FormColor from './screens/FormColor';
 import AdmMarcas from './screens/AdmMarcas';
 import FormMarca from './screens/FormMarca';
-import AdmPaisResidencia from './screens/AdmPaisResidencia';
-import FormPaisResidencia from './screens/FormPaisResidencia';
+import FormMarcaModificar from './screens/FormMarcaModificar';
 
 import {
   BrowserRouter as Router,
@@ -44,6 +43,9 @@ function AppWrapper() {
           <Route path='/login' element={<Login/>} />
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
+          <Route path='/Alquileres' element={<Alquileres/>} />
+          <Route path='/Alquileres/AdmAlquileresActivos' element={<AdmAlquileresActivos/>} />
+          <Route path='/Alquileres/AdmHistorialAlquileres' element={<AdmHistorialAlquileres/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
           <Route path='/AdmColores' element={<AdmColores/>} />
           <Route path='/AdmColores/FormColor' element={<FormColor/>} />
