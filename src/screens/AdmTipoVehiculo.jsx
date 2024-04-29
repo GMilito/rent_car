@@ -8,7 +8,7 @@ const admTipoVehiculo = () => {
   const [tipoVehiculos, setTipoVehiculos] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarTipoVehiculos = () => {
-    fetch('http://127.0.0.1:3001/tipoVehiculos-sql')
+    fetch('http://127.0.0.1:3001/tipoVehiculo')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -20,7 +20,7 @@ const admTipoVehiculo = () => {
     cargarTipoVehiculos();
   }, []);
  
-  const handleDelete = async (id) => {
+  const handleDelete = async (idTipoVehiculo) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
     
     if (!confirmar) { 
@@ -29,66 +29,21 @@ const admTipoVehiculo = () => {
     
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/tipoVehiculos/${idTipo}`;
+      const url = `http://127.0.0.1:3001/tipoVehiculo/${idTipoVehiculo}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
       
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Color eliminado:', data.message);
+      console.log('Tipo de Vehiculo eliminado:', data.message);
     
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setTipoVehiculos(prevTipoVehiculos=> prevTipoVehiculos.filter(tipoVehiculo => tipoVehiculo.idTipo !== idTipo));
+      setTipoVehiculos(prevTipoVehiculos=> prevTipoVehiculos.filter(tipoVehiculo => tipoVehiculo.idTipoVehiculo !== idTipoVehiculo));
     } catch (error) {
       console.error('Error al eliminar el tipo de vehiculo:', error);
       alert(`Error al eliminar el tipo de vehiculo: ${error.message}`);
     }
   };
-  
 
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
@@ -108,11 +63,11 @@ const admTipoVehiculo = () => {
         {tipoVehiculos
           .map((tipoVehiculo) => (
             <Tr key={tipoVehiculo.idTipo}>
-              <Td>{tipoVehiculo.idTipo}</Td>
+              <Td><a href={`/AdmTipoVehiculo/FormTipoVehiculoModificar/${tipoVehiculo.idTipoVehiculo}`}>{tipoVehiculo.idTipoVehiculo}</a></Td>
               <Td>{tipoVehiculo.nombre}</Td>
               <Td>{tipoVehiculo.montoPorHora}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(tipoVehiculo.id)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(tipoVehiculo.idTipoVehiculo)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}
