@@ -40,7 +40,7 @@ const FormTransmision = () => {
       tipoTransmision: transmision.tipoTransmision,
     }
     // Primero intentar insertar en SQL Server
-    insertarColor('http://127.0.0.1:3001/transmision', datosTransmision)
+    insertarTransmision('http://127.0.0.1:3001/transmision', datosTransmision)
     .then(data => {
       console.log('Marca agregada en MySQL:', data);
       alert('Marca agregada con éxito.');
@@ -49,7 +49,7 @@ const FormTransmision = () => {
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al agregar el color. ' + error.message);
+        alert('Error al agregar el la marca. ' + error.message);
       });
   };
 const resetForm = () => {

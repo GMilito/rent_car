@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 const AdmTransmision = () => {
-  const [transmision, setTransmision] = useState([]);
+  const [transmisiones, setTransmision] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarTransmisiones = () => {
     fetch('http://127.0.0.1:3001/transmision')
@@ -63,10 +63,10 @@ const AdmTransmision = () => {
         {transmisiones
           .map((transmision) => (
             <Tr key={transmision.idTransmision}>
-      <BotonAgregar as={Link} to="/AdmTransmision/FormTransmisionModificar">Nuevo</BotonAgregar>
+            <Td><a href={`/AdmTransmision/FormTransmisionModificar/${transmision.idTransmision}`}>{transmision.idTransmision}</a></Td>
               <Td>{transmision.tipoTransmision}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(color.id)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(transmision.idTransmision)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}
