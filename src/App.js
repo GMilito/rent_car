@@ -2,15 +2,16 @@
 import './App.css';
 
 import Navbar from './components/Navbar';
-import AdmClientes from './screens/AdmClientes'; //1
+import AdmClientes from './screens/AdmClientes'; 
 import AdmVehiculos from './screens/AdmVehiculos';
 import AdmColores from './screens/AdmColores';
 import Usuarios from './screens/Usuarios';
 import Login from './screens/Login';
 import FormColor from './screens/FormColor';
-
-
-import {
+import Alquileres from './screens/Alquileres';
+import AdmAlquileresActivos from './screens/AdmAlquileresActivos';
+import AdmHistorialAlquileres from './screens/AdmHistorialAlquileres';
+ import {
   BrowserRouter as Router,
   Routes,
   Route,
@@ -38,6 +39,8 @@ function AppWrapper() {
           <Route path='/Principal' element={<Principal/>} />  
           <Route path='/Usuarios' element={<Usuarios/>} />
           <Route path='/Alquileres' element={<Alquileres/>} />
+          <Route path='/Alquileres/AdmAlquileresActivos' element={<AdmAlquileresActivos/>} />
+          <Route path='/Alquileres/AdmHistorialAlquileres' element={<AdmHistorialAlquileres/>} />
           <Route path='/AdmClientes' element={<AdmClientes/>} />
           <Route path='/AdmColores' element={<AdmColores/>} />
           <Route path='/AdmColores/FormColor' element={<FormColor/>} />

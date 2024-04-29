@@ -22,6 +22,8 @@ const Principal = () => {
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmHistorialAlquileres">Ver Historial de Alquileres</BotonAgregar>
         <br></br>
+        <BotonAgregar as={Link} to="/Alquileres/Devoluciones">Devoluciones</BotonAgregar>
+        <br></br>
 
       </Contenedor>
       
