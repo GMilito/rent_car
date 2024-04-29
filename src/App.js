@@ -10,7 +10,8 @@ import Login from './screens/Login';
 import FormColor from './screens/FormColor';
 import AdmMarcas from './screens/AdmMarcas';
 import FormMarca from './screens/FormMarca';
-import FormMarcaModificar from './screens/FormMarcaModificar';
+import AdmPaisResidencia from './screens/AdmPaisResidencia';
+import FormPaisResidencia from './screens/FormPaisResidencia';
 
 import {
   BrowserRouter as Router,
@@ -26,6 +27,9 @@ import Principal from './screens/Principal';
 import FormVehiculo from './screens/FormVehiculo';
 import FormVehiculoModificar from './screens/FormVehiculoModificar';
 import FormColorModificar from './screens/FormColorModificar';
+import FormMarcaModificar from './screens/FormMarcaModificar';
+import FormPaisModificar from './screens/FormPaisModificar';
+
 
 
 function AppWrapper() {
@@ -52,6 +56,9 @@ function AppWrapper() {
           <Route path="/AdmMarcas" element={<AdmMarcas/>} />
           <Route path="/AdmMarcas/FormMarca" element={<FormMarca/>} />
           <Route path="/AdmMarcas/FormMarcaModificar/:idMarca" element={<FormMarcaModificar/>} />
+          <Route path="/AdmPaisResidencia" element={<AdmPaisResidencia/>} />
+          <Route path="/AdmPaisResidencia/FormPaisResidencia" element={<FormPaisResidencia/>} />
+          <Route path="/AdmPaisResidencia/FormPaisModificar/:idPais" element={<FormPaisModificar/>}/>
       </Routes>
     </div>
   );

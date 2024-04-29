@@ -53,13 +53,9 @@ const FormMarca = () => {
       });
   };
   
-  
-
-
 const resetForm = () => {
     setMarca({ nombreMarca: ''});
 };
-
 
   return (
     <ContenedorTabla>

@@ -1,59 +1,71 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormPaisResidencia = () => {
+const FormPaisModificar = () => {
   const [pais, setPais] = useState({nombrePais: ''});
+  const {idPais} = useParams();
 
+ const cargarPais = () => {
+    if (!idPais) {
+      console.error("No hay ID de Pais proporcionado");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/pais/${idPais}`)
+      .then(response => response.json())
+      .then(data => {
+        setPais(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
+useEffect(() => {
+    cargarPais();
+  }, []);
+  
   const handleChange = (e) => {
     setPais({ ...pais, [e.target.name]: e.target.value });
   };
   
   const handleSubmit = (e) => {
     e.preventDefault();
-  
     if (!pais.nombrePais )  {
       console.error('Todos los campos son obligatorios');
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarPais = (url, paisData) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(paisData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
-    };
-    const datosPais = {
-      nombrePais: pais.nombrePais,
-    };
-    // Primero intentar insertar en SQL Server
-    insertarPais('http://127.0.0.1:3001/pais', datosPais)
-    .then(data => {
-      console.log('Pais agregado en MySQL:', data);
-      alert('Pais agregada con éxito.');
-      resetForm(); 
-      console.log('Pais agregado en SQL Server:', data);
+ // Definir una función auxiliar para insertar el cliente en una base de datos
+ const modificarPais = (paisData) => {
+    return fetch(`http://127.0.0.1:3001/pais/${idPais}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(paisData)
     })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el pais. ' + error.message);
-      });
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    });
   };
-const resetForm = () => {
-    setPais({ nombrePais: ''});
+  // Construir objeto con datos del cliente a modificar
+  const datosPais = {
+    nombrePais: pais.nombrePais,
+  };
+  // Intentar modificar el cliente en la base de datos
+  modificarPais(datosPais)
+    .then(data => {
+      console.log('Pais modificado con éxito:', data);
+      alert('Pais modificado con éxito');
+    })
+    .catch(error => {
+      console.error('Error al modificar el pais:', error);
+      alert('Error al modificar el pais: ' + error.message);
+    });
 };
-
 
   return (
     <ContenedorTabla>
@@ -78,7 +90,7 @@ const resetForm = () => {
     </ContenedorTabla>
   );
 };
-export default FormPaisResidencia;
+export default FormPaisModificar;
 
 const ContenedorTabla = styled.div`
   padding:50px;

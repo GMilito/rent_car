@@ -23,8 +23,11 @@ const links = [
   name : "Marcas",
   href : "/AdmMarcas",
   },
+  {
+    name : "Paises",
+    href : "/AdmPaisResidencia",
+    },
 ]
-
 
 const NavBar = () => {
   return (
@@ -69,6 +72,8 @@ const NavContainer = styled.nav`
   div {
     display: flex;
     align-items: center;
+   
+    justify-content:
   }
   
 
