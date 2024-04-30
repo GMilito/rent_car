@@ -5,18 +5,20 @@ import { Link, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FormTarjetaModificar = () => {
-  const [tarjetas, setTarjetas] = useState({numeroTarjeta: '', PIN:'', CVV:'', idCliente:'', idTipoTarjeta:''});
+  const [tarjeta, setTarjeta] = useState({NumeroTarjeta: '', PIN:'', CVV:'', idTipoTarjeta:''});
   const [tipoTarjetas, setTipoTarjetas] =useState([]) 
-  const { numeroTarjeta } = useParams();
+
+  const { idCliente, NumeroTarjeta } = useParams();
+
   const cargarDatosIniciales = () => {
     Promise.all([
       fetch('http://127.0.0.1:3001/tipoTarjetas').then(res => res.json()).then(data => setTipoTarjetas(data)),
-      fetch(`http://127.0.0.1:3001/tarjetas/${numeroTarjeta}`).then(res => {
+      fetch(`http://127.0.0.1:3001/tarjetas-s/${NumeroTarjeta}`).then(res => {
         if (!res.ok) throw new Error('Network response was not ok');
         return res.json();
       }).then(data => {
         console.log("carga exitosa")
-        setTarjetas(data);
+        setTarjeta(data[0]);
         console.log(data)
       }).catch(error => console.error("Error al obtener los datos de Tarjetas:", error))
     ]).catch(error => console.error("Error al cargar datos iniciales:", error));
@@ -28,13 +30,13 @@ const FormTarjetaModificar = () => {
 
 
   const handleChange = (e) => {
-    setTarjetas({ ...tarjetas, [e.target.name]: e.target.value });
+    setTarjeta({ ...tarjeta, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!tarjetas.numeroTarjeta || !tarjetas.PIN || !tarjetas.CVV || !tarjetas.idTipoTarjeta|| !tarjetas.idCliente) {
+    if (!tarjeta.NumeroTarjeta || !tarjeta.PIN || !tarjeta.CVV || !tarjeta.idTipoTarjeta) {
       console.error('Todos los campos son obligatorios');
       return;
     }
@@ -57,15 +59,14 @@ const FormTarjetaModificar = () => {
     };
 
     const datosTarjeta = {
-      numeroTarjeta: tarjetas.numeroTarjeta,
-      PIN: tarjetas.PIN ,
-      CVV: tarjetas.CVV,
-      idCliente: tarjetas.idCliente,
-      idTipoTarjeta: tarjetas.idTipoTarjeta
+      numeroTarjeta: tarjeta.NumeroTarjeta,
+      PIN: tarjeta.PIN ,
+      CVV: tarjeta.CVV,
+      idCliente:idCliente,
+      idTipoTarjeta: tarjeta.idTipoTarjeta
     };
 
-    const TarjetaUrl = `http://127.0.0.1:3001/tarjetas/${numeroTarjeta
-      }`;
+    const TarjetaUrl = `http://127.0.0.1:3001/tarjetas/${NumeroTarjeta}`;
     modificarTarjeta(TarjetaUrl, datosTarjeta)
       .then(data => {
         console.log('Tarjeta modificada en SQL Server:', data);
@@ -79,7 +80,7 @@ const FormTarjetaModificar = () => {
   };
 
   const resetForm = () => {
-    setTarjetas({ numeroTarjeta: '', PIN:'', CVV:'', idCliente:'', idTipoTarjeta:''});
+    setTarjeta({ numeroTarjeta: '', PIN:'', CVV:'', idTipoTarjeta:''});
   };
 
 
@@ -92,7 +93,7 @@ const FormTarjetaModificar = () => {
           <StyledInput
             type="number"
             name="numeroTarjeta"
-            value={tarjetas.numeroTarjeta}
+            value={tarjeta.NumeroTarjeta}
             onChange={handleChange}
             placeholder="Numero de Tarjeta"
             required
@@ -101,7 +102,7 @@ const FormTarjetaModificar = () => {
           <StyledInput
             type="number"
             name="PIN"
-            value={tarjetas.PIN}
+            value={tarjeta.PIN}
             onChange={handleChange}
             placeholder="PIN"
             required
@@ -110,37 +111,29 @@ const FormTarjetaModificar = () => {
           <StyledInput
             type="number"
             name="CVV"
-            value={tarjetas.CVV}
+            value={tarjeta.CVV}
             onChange={handleChange}
             placeholder="CVV"
             required
           />
-          <StyledLabel>Identificacion del Cliente:</StyledLabel>
-          <StyledInput
-            type="number"
-            name="idCliente"
-            value={tarjetas.idCliente}
-            onChange={handleChange}
-            placeholder="Identificacion Cliente"
-            required
-          />
+
           <StyledLabel>Tipo Tarjeta:</StyledLabel>
           <StyledSelect
             name="idTipoTarjeta"
-            value={tarjetas.idTipoTarjeta}
+            value={tarjeta.idTipoTarjeta}
             onChange={handleChange}
             required
           >
             <option value="">Seleccione un tipo</option>
             {tipoTarjetas
               .map((tv) => (
-                <option value={tv.idTipoTarjeta}>{tv.idTipoTarjeta}</option>
+                <option value={tv.idTipoTarjeta}>{tv.tipo}</option>
               ))}
           </StyledSelect>
 
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmTarjetas">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to={`/AdmClientes/AdmTarjetas/${idCliente}`}>Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>

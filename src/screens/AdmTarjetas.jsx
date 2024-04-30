@@ -1,17 +1,19 @@
 // En /screens/AdmClientes.js
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 const AdmTarjetas = () => {
   const [tarjetas, setTarjetas] = useState([]);
-  const [tipoTarjetas, setTipoTarjetas] =useState([])  //Neuvo estado para controlar el filtrado de clientes
+
+  const [tipoTarjetas, setTipoTarjetas] = useState([])  //Neuvo estado para controlar el filtrado de clientes
+  const { idCliente } = useParams();
   const cargarTarjetas = () => {
-    fetch('http://127.0.0.1:3001/tarjetas')
+    fetch(`http://127.0.0.1:3001/tarjetas/${idCliente}`)
       .then(response => response.json())
       .then(data => {
-        console.log(data); // Esto debería mostrar los datos en la consola
+        console.log("TARJETAS", data); // Esto debería mostrar los datos en la consola
         setTarjetas(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
@@ -28,34 +30,35 @@ const AdmTarjetas = () => {
   useEffect(() => {
     cargarTarjetas();
     cargarTipoTarjeta();
+
   }, []);
- 
+
   const handleDelete = async (numeroTarjeta) => {
     const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    
+
     if (!confirmar) {
       return;
     }
-    
+
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
       const url = `http://127.0.0.1:3001/tarjetas/${numeroTarjeta}`;
       const response = await fetch(url, { method: 'DELETE' });
-      const data = await response.json(); 
+      const data = await response.json();
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
       console.log('Tarjeta eliminada:', data.message);
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setTarjetas(prevTarjetas=> prevTarjetas.filter(tarjeta => tarjeta.numeroTarjeta !== numeroTarjeta));
+      setTarjetas(prevTarjetas => prevTarjetas.filter(tarjeta => tarjeta.numeroTarjeta !== numeroTarjeta));
     } catch (error) {
       console.error('Error al eliminar la tarjeta:', error);
       alert(`Error al eliminar la tarjeta: ${error.message}`);
     }
   };
   return (
-    
+
     <ContenedorTabla>
       <h1>Administación de Tarjetas</h1>
-      <BotonAgregar as={Link} to="/AdmTarjetas/FormTarjeta">Nuevo</BotonAgregar>
+      <BotonAgregar as={Link} to={`/AdmTarjetas/FormTarjeta/${idCliente}`}>Nuevo</BotonAgregar>
       <br></br>
       <Table>
         <thead>
@@ -69,22 +72,27 @@ const AdmTarjetas = () => {
           </Tr>
         </thead>
         <tbody>
-        {tarjetas
-          .map((tarjeta) => {
-            const tipoTarjeta = tipoTarjetas.find(tipoTarjetas => tipoTarjetas.idTipoTarjeta === tarjeta.idTipoTarjeta);
-            
-            <Tr key={tarjeta.numeroTarjeta}>
-               <Td><a href={`/AdmTarjetas/FormTarjetaModificar/${tarjeta.numeroTarjeta}`}>{tarjeta.numeroTarjeta}</a></Td>
-              <Td>{tarjeta.PIN}</Td>
-              <Td>{tarjeta.CVV}</Td>
-              <Td>{tarjeta.fechaVencimiento}</Td>
-              <Td>{tipoTarjeta ? tipoTarjeta.tipo : 'No disponible'}</Td>
-              <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(tarjeta.numeroTarjeta)}>Eliminar</BotonAccionEliminar>
-              </Td>
-            </Tr>
-        })}
+          {tarjetas.map((tarjeta) => {
+            const tipoTarjeta = tipoTarjetas.find(tipo => tipo.idTipoTarjeta === tarjeta.idTipoTarjeta);
+            return (
+              <Tr key={tarjeta.NumeroTarjeta}>
+                <Td>
+                  <a href={`/AdmTarjetas/FormTarjetaModificar/${tarjeta.idCliente}/${tarjeta.NumeroTarjeta}`}>
+                    {tarjeta.NumeroTarjeta}
+                  </a>
+                </Td>
+                <Td>{tarjeta.PIN}</Td>
+                <Td>{tarjeta.CVV}</Td>
+                <Td>{tarjeta.fechaVencimiento}</Td>
+                <Td>{tipoTarjeta ? tipoTarjeta.tipo : 'No disponible'}</Td>
+                <Td>
+                  <BotonAccionEliminar onClick={() => handleDelete(tarjeta.NumeroTarjeta)}>Eliminar</BotonAccionEliminar>
+                </Td>
+              </Tr>
+            );
+          })}
         </tbody>
+
       </Table>
     </ContenedorTabla>
   );

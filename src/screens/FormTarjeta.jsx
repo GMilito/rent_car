@@ -1,12 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 const FormTarjeta = () => {
-  const [tarjetas, setTarjetas] = useState({numeroTarjeta: '', PIN:'', CVV:'', fechaVencimiento:'', idCliente:'', idTipoTarjeta:''});
-  const [tipoTarjetas, setTipoTarjetas] =useState([]) 
+  const [tarjetas, setTarjetas] = useState({ numeroTarjeta: '', PIN: '', CVV: '', fechaVencimiento: '', idTipoTarjeta: '' });
+  const [tipoTarjetas, setTipoTarjetas] = useState([])
+
+  const { idCliente } = useParams();
+
+
 
   const cargarTipoTarjeta = () => {
     fetch('http://127.0.0.1:3001/tipoTarjetas')
@@ -16,7 +20,7 @@ const FormTarjeta = () => {
       })
       .catch(error => console.error("Error al obtener los datos:", error));
   };
- 
+
 
   useEffect(() => {
     cargarTipoTarjeta();
@@ -31,7 +35,7 @@ const FormTarjeta = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!tarjetas.numeroTarjeta || !tarjetas.PIN || !tarjetas.CVV || !tarjetas.fechaVencimiento || !tarjetas.idTipoTarjeta|| !tarjetas.idCliente) {
+    if (!tarjetas.numeroTarjeta || !tarjetas.PIN || !tarjetas.CVV || !tarjetas.fechaVencimiento || !tarjetas.idTipoTarjeta || !idCliente) {
       console.error('Todos los campos son obligatorios');
       return;
     }
@@ -57,10 +61,10 @@ const FormTarjeta = () => {
 
     const datosTarjeta = {
       numeroTarjeta: tarjetas.numeroTarjeta,
-      PIN: tarjetas.PIN ,
+      PIN: tarjetas.PIN,
       CVV: tarjetas.CVV,
       fechaVencimiento: tarjetas.fechaVencimiento,
-      idCliente: tarjetas.idCliente,
+      idCliente: idCliente,
       idTipoTarjeta: tarjetas.idTipoTarjeta
     };
 
@@ -78,7 +82,7 @@ const FormTarjeta = () => {
   };
 
   const resetForm = () => {
-    setTarjetas({ numeroTarjeta: '', PIN:'', CVV:'', fechaVencimiento:'', idCliente:'', idTipoTarjeta:''});
+    setTarjetas({ numeroTarjeta: '', PIN: '', CVV: '', fechaVencimiento: '', idTipoTarjeta: '' });
   };
 
 
@@ -114,22 +118,13 @@ const FormTarjeta = () => {
             placeholder="CVV"
             required
           />
-           <StyledLabel>Fecha Vencimiento:</StyledLabel>
+          <StyledLabel>Fecha Vencimiento:</StyledLabel>
           <StyledInput
             type="date"
             name="fechaVencimiento"
             value={tarjetas.fechaVencimiento}
             onChange={handleChange}
             placeholder="Fecha de vencimiento"
-            required
-          />
-          <StyledLabel>Identificacion del Cliente:</StyledLabel>
-          <StyledInput
-            type="number"
-            name="idCliente"
-            value={tarjetas.idCliente}
-            onChange={handleChange}
-            placeholder="Identificacion Cliente"
             required
           />
           <StyledLabel>Tipo Tarjeta:</StyledLabel>
@@ -148,7 +143,7 @@ const FormTarjeta = () => {
 
           <ContenedorBotones>
             <BotonAgregar type="submit">Guardar</BotonAgregar>
-            <BotonCancelar as={Link} to="/AdmTarjetas">Cancelar</BotonCancelar>
+            <BotonCancelar as={Link} to={`/AdmClientes/AdmTarjetas/${idCliente}`}>Cancelar</BotonCancelar>
           </ContenedorBotones>
         </StyledForm>
       </FormContainer>

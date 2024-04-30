@@ -110,8 +110,9 @@ function AppWrapper() {
           <Route path="/AdmTipoTarjeta/FormTipoTarjeta" element={<FormTipoTarjeta/>} />
           <Route path="/AdmTipoTarjeta/FormTipoTarjetaModificar/:idTipoTarjeta" element={<FormTipoTarjetaModificar/>}/>
           <Route path="/AdmTarjetas" element={<AdmTarjetas/>} />
-          <Route path="/AdmTarjetas/FormTarjeta" element={<FormTarjeta/>} />
-          <Route path="/AdmTarjetas/FormTarjetaModificar/:numeroTarjeta" element={<FormTarjetaModificar/>}/>
+          <Route path="/AdmTarjetas/FormTarjeta/:idCliente" element={<FormTarjeta/>} />
+          <Route path="/AdmTarjetas/FormTarjetaModificar/:idCliente/:NumeroTarjeta" element={<FormTarjetaModificar/>} />
+
 
           
       </Routes>

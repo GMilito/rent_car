@@ -54,7 +54,6 @@ const AdmDetallesAlquiler = () => {
               <Td>{detalleAlquiler.idUsuario}</Td>
               <Td>{detalleAlquiler.monto}</Td>
               <Td>{detalleAlquiler.idSeguro}</Td>
-           
               <Td>{detalleAlquiler.fechaDevolucion}</Td>
               <Td>{detalleAlquiler.montoTotal }</Td>
             </Tr>

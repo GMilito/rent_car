@@ -46,14 +46,14 @@ const ContenedorLogo = styled.div`
 
 const NavContainer = styled.nav`
   position: fixed;
-  padding: 2px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   background-color: #ff9900; /* Naranja pastel claro */
   display: flex;
   width: 100%;
-  align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  right:0;
+
   img {
     max-width: 200px;
   }

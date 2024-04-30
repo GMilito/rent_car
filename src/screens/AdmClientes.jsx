@@ -124,8 +124,8 @@ const AdmClientes = () => {
                   <Td>{cliente.direccion}</Td>
                   <Td>{tipoCliente ? tipoCliente.tipoCliente : 'No disponible'}</Td>
                   <Td>
-                    <BotonAccionEliminar as={Link} to={`/AdmClientes/AdmTarjetas/${cliente.id}`}>Ver tarjetas</BotonAccionEliminar>
-                    <BotonAccionEliminar onClick={() => handleDelete(cliente.id)}>Eliminar</BotonAccionEliminar>
+                    <BotonTarjetas as={Link} to={`/AdmClientes/AdmTarjetas/${cliente.id}`}>Ver tarjetas</BotonTarjetas>
+                    <BotonAccionEliminar as={Link} onClick={() => handleDelete(cliente.id)}>Eliminar</BotonAccionEliminar>
                   </Td>
                 </Tr>
               );
@@ -163,6 +163,10 @@ const BotonAccion = styled.button`
   &:hover {
     opacity: 0.8;
   }
+`;
+const BotonTarjetas = styled(BotonAccion)`
+  background-color: #FFA500; /* Rojo */
+  color: white;
 `;
 
 const BotonAccionEliminar = styled(BotonAccion)`
