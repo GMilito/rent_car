@@ -1,19 +1,19 @@
 
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
 const FormVehiculoModificar = () => {
-  const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'Disponible', idTransmision: ''});
+  const [vehiculo, setVehiculo] = useState({ placa:'', idTipo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: 'Disponible', idTransmision: '' });
   const [colores, setColores] = useState([])
   const [combustibles, setCombustibles] = useState([])
   const [transmisiones, setTransmisiones] = useState([])
   const [marcas, setMarcas] = useState([])
   const [tipoVehiculos, setTipoVehiculos] = useState([])
-  const {id} = useParams();
+  const { id } = useParams();
 
-   const cargarDatosIniciales = () => {
+  const cargarDatosIniciales = () => {
     Promise.all([
       fetch('http://127.0.0.1:3001/color').then(res => res.json()).then(data => setColores(data)),
       fetch('http://127.0.0.1:3001/combustibles').then(res => res.json()).then(data => setCombustibles(data)),
@@ -40,17 +40,17 @@ const FormVehiculoModificar = () => {
   const handleChange = (e) => {
     setVehiculo({ ...vehiculo, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    
-    if (!id || !vehiculo.idTipoVehiculo || !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca || !vehiculo.estado || !vehiculo.idTransmision) {
+
+    if (!id || !vehiculo.placa || !vehiculo.idTipoVehiculo || !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca || !vehiculo.estado || !vehiculo.idTransmision) {
       console.error('Todos los campos son obligatorios');
       return;
     }
 
-  
+
     const modificarVehiculo = (url, vehiculoData) => {
       return fetch(url, {
         method: 'PUT',
@@ -59,12 +59,12 @@ const FormVehiculoModificar = () => {
         },
         body: JSON.stringify(vehiculoData)
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
     };
 
     const datosVehiculo = {
@@ -72,14 +72,15 @@ const FormVehiculoModificar = () => {
       Color: vehiculo.idColor,
       TipoCombustible: vehiculo.idCombustible,
       Año: vehiculo.año,
-      Marca: vehiculo.idMarca, 
+      Marca: vehiculo.idMarca,
       Estado: vehiculo.estado,
+      Placa : vehiculo.placa,
       IdTransmision: vehiculo.idTransmision,
     };
 
 
     const vehiculoUrl = `http://127.0.0.1:3001/vehiculos/${id
-  }`;
+      }`;
     modificarVehiculo(vehiculoUrl, datosVehiculo)
       .then(data => {
         console.log('Vehículo modificado en SQL Server:', data);
@@ -92,13 +93,13 @@ const FormVehiculoModificar = () => {
       });
   };
 
-  
-  
 
 
-const resetForm = () => {
-    setVehiculo({ idTipoVehiculo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
-};
+
+
+  const resetForm = () => {
+    setVehiculo({ placa:'', idTipoVehiculo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: '', idTransmision: '' });
+  };
 
 
   return (
@@ -106,7 +107,15 @@ const resetForm = () => {
       <h1>Crear Vehiculo</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-        
+          <StyledLabel>Placa:</StyledLabel>
+          <StyledInput
+            type="text"
+            name="placa"
+            value={vehiculo.placa}
+            onChange={handleChange}
+            placeholder="Placa"
+            required
+          />
           <StyledLabel>Tipo Vehiculo:</StyledLabel>
           <StyledSelect
             name="idTipoVehiculo"
@@ -168,7 +177,7 @@ const resetForm = () => {
                 <option value={tv.idMarca}>{tv.nombreMarca}</option>
               ))}
           </StyledSelect>
-         
+
           <StyledLabel>Transmision:</StyledLabel>
           <StyledSelect
             name="idTransmision"

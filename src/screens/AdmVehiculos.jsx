@@ -118,6 +118,7 @@ const AdmVehiculos = () => {
         <thead>
           <Tr>
             <Th>ID</Th>
+            <Th>Placa</Th>
             <Th>Tipo Vehiculo</Th>
             <Th>Color</Th>
             <Th>Combustible</Th>
@@ -143,6 +144,7 @@ const AdmVehiculos = () => {
               return (
                 <Tr key={vehiculo.idVehiculo}>
                   <Td><a href={`/AdmVehiculos/FormVehiculoModificar/${vehiculo.idVehiculo}`}>{vehiculo.idVehiculo}</a></Td>
+                  <Td>{vehiculo.placa}</Td>
                   <Td>{tipoVehiculo ? tipoVehiculo.nombre : 'No disponible'}</Td>
                   <Td>{color ? color.nombreColor : 'No disponible'}</Td>
                   <Td>{combustible ? combustible.nombreCombustible : 'No disponible'}</Td>

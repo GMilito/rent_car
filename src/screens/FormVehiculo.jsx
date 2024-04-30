@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const FormVehiculo = () => {
-  const [vehiculo, setVehiculo] = useState({ idTipo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'Disponible', idTransmision: ''});
+  const [vehiculo, setVehiculo] = useState({ placa: '', idTipo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: 'Disponible', idTransmision: '' });
   const [colores, setColores] = useState([])
   const [combustibles, setCombustibles] = useState([])
   const [transmisiones, setTransmisiones] = useState([])
@@ -68,16 +68,16 @@ const FormVehiculo = () => {
   const handleChange = (e) => {
     setVehiculo({ ...vehiculo, [e.target.name]: e.target.value });
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-  
-    if (!vehiculo.idTipoVehiculo|| !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca|| !vehiculo.estado || !vehiculo.idTransmision )  {
+
+    if (!vehiculo.placa || !vehiculo.idTipoVehiculo || !vehiculo.idColor || !vehiculo.idCombustible || !vehiculo.año || !vehiculo.idMarca || !vehiculo.estado || !vehiculo.idTransmision) {
       console.error('Todos los campos son obligatorios');
       return;
     }
 
-  
+
     // Definir una función auxiliar para insertar el cliente en una base de datos
     const insertarVehiculo = (url, vehiculoData) => {
       return fetch(url, {
@@ -87,44 +87,45 @@ const FormVehiculo = () => {
         },
         body: JSON.stringify(vehiculoData)
       })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
     };
-  
+
 
     const datosVehiculo = {
       idTipoVehiculo: vehiculo.idTipoVehiculo,
       idColor: vehiculo.idColor,
       idCombustible: vehiculo.idCombustible,
       año: vehiculo.año,
-      idMarca: vehiculo.idMarca, 
+      idMarca: vehiculo.idMarca,
       estado: 'Disponible',
+      placa: vehiculo.placa,
       idTransmision: vehiculo.idTransmision,
     };
-  
+
     // Primero intentar insertar en SQL Server
     insertarVehiculo('http://127.0.0.1:3001/vehiculos', datosVehiculo)
       .then(data => {
         console.log('Vehiculo agregado en SQL Server:', data);
         alert('Vehiculo agregado con éxito');
-        resetForm(); 
+        resetForm();
       })
       .catch(error => {
         console.error('Error:', error);
         alert('Error al agregar el vehiculo. ' + error.message);
       });
   };
-  
-  
 
 
-const resetForm = () => {
-    setVehiculo({ idTipoVehiculo: '', idColor: '', idCombustible: '', año:'', idMarca:'', estado:'', idTransmision: ''});
-};
+
+
+  const resetForm = () => {
+    setVehiculo({ placa:'', idTipoVehiculo: '', idColor: '', idCombustible: '', año: '', idMarca: '', estado: '', idTransmision: '' });
+  };
 
 
   return (
@@ -132,7 +133,15 @@ const resetForm = () => {
       <h1>Crear Vehiculo</h1>
       <FormContainer>
         <StyledForm onSubmit={handleSubmit}>
-        
+          <StyledLabel>Placa:</StyledLabel>
+          <StyledInput
+            type="text"
+            name="placa"
+            value={vehiculo.placa}
+            onChange={handleChange}
+            placeholder="Placa"
+            required
+          />
           <StyledLabel>Tipo Vehiculo:</StyledLabel>
           <StyledSelect
             name="idTipoVehiculo"
@@ -194,7 +203,7 @@ const resetForm = () => {
                 <option value={tv.idMarca}>{tv.nombreMarca}</option>
               ))}
           </StyledSelect>
-         
+
           <StyledLabel>Transmision:</StyledLabel>
           <StyledSelect
             name="idTransmision"
