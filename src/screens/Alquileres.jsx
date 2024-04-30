@@ -22,8 +22,7 @@ const Alquileres = () => {
         <br></br>
         <BotonAgregar as={Link} to="/Alquileres/AdmHistorialAlquileres">Ver Historial de Alquileres</BotonAgregar>
         <br></br>
-        <BotonAgregar as={Link} to="/AdmVehiculos">Devoluciones</BotonAgregar>
-        <br></br>
+
 
       </Contenedor>
       

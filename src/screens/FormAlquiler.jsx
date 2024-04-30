@@ -8,8 +8,10 @@ const FormAlquiler = () => {
     const [alquiler, setAlquiler] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [seguros, setSeguros] = useState([]);
+    const [recibo, setRecibo] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const [filtroCedula, setFiltroCedula] = useState('');
-    const {idVehiculo} = useParams();
+    const { idVehiculo } = useParams();
 
     const cargarClientes = () => {
         fetch('http://127.0.0.1:3001/clientes')
@@ -29,6 +31,15 @@ const FormAlquiler = () => {
             })
             .catch(error => console.error("Error al obtener los datos:", error));
     };
+    const obtenerRecibo = (idAlquiler) => {
+        fetch(`http://127.0.0.1:3001/generarReciboAlquiler/${idAlquiler}`)
+            .then(response => response.json())
+            .then(data => {
+                setRecibo(data.recibo); // Asumiendo que la respuesta tiene un objeto 'recibo'
+                setShowModal(true); // Muestra el modal
+            })
+            .catch(error => console.error("Error al obtener el recibo:", error));
+    };
 
     useEffect(() => {
         cargarClientes();
@@ -42,7 +53,7 @@ const FormAlquiler = () => {
             setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
         }
     };
-    
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -81,7 +92,7 @@ const FormAlquiler = () => {
         insertarAlquiler('http://127.0.0.1:3001/realizarAlquiler', datosAlquiler)
             .then(data => {
                 console.log('Alquiler agregado en SQL Server:', data);
-                alert('Alquiler agregado con éxito');
+                obtenerRecibo(data.idAlquiler);
                 resetForm();
             })
             .catch(error => {
@@ -93,6 +104,26 @@ const FormAlquiler = () => {
     const resetForm = () => {
         setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: '' });
     };
+
+    const ReciboModal = () => (
+        showModal && (
+            <ModalContainer>
+                <ContainerRecibo>
+                    <h2>Recibo de Alquiler</h2>
+                    {recibo ? (
+                        <ul>
+                            <li>ID Alquiler: {recibo.idAlquiler}</li>
+                            <li>Cliente: {recibo.Cliente}</li>
+                            <li>Fecha Alquiler: {recibo.fechaAlquiler}</li>
+                            <li>Fecha Entrega: {recibo.fechaEntrega}</li>
+                            <li>Monto: ${recibo.monto}</li>
+                        </ul>
+                    ) : <p>Cargando recibo...</p>}
+                    <BotonCancelar onClick={() => setShowModal(false)}>Cerrar</BotonCancelar>
+                </ContainerRecibo>
+            </ModalContainer>
+        )
+    );
 
     return (
         <ContenedorTabla>
@@ -161,14 +192,32 @@ const FormAlquiler = () => {
                     </ContenedorBotones>
                 </StyledForm>
             </FormContainer>
+            <ReciboModal />
         </ContenedorTabla>
     );
 };
 
 export default FormAlquiler;
 
+const ModalContainer = styled.div`
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5); // Semi-transparente
+        z-index: 1000; // Asegura que esté por encima de otros elementos
+  
+    `;
+const ContainerRecibo = styled.div`
+    padding:10px;
+    background-color:white;
+    border-radius:25px;
 
-
+`;
 const ContenedorTabla = styled.div`
   padding:50px;
 

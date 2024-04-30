@@ -155,7 +155,7 @@ const AdmVehiculos = () => {
                       <BotonAlquilar as={Link} to={`/AdmVehiculos/FormAlquiler/${vehiculo.idVehiculo}`}>Alquilar</BotonAlquilar>
                     ) : (
 
-                      <BotonDevolver as={Link} to={`/AdmVehiculos/Devoluciones/${vehiculo.idVehiculo}`}>Devolver</BotonDevolver>
+                      <BotonAlquilarDesabilitado as={Link} >Alquilar</BotonAlquilarDesabilitado>
 
                     )}
                     <BotonAccionEliminar onClick={() => handleDelete(vehiculo.idVehiculo)}>Eliminar</BotonAccionEliminar>
@@ -207,6 +207,14 @@ const BotonCancelar = styled(BotonAccion)`
 `;
 const BotonAlquilar = styled(BotonAccion)`
   background-color: #4CAF50; 
+  color: white;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`;
+const BotonAlquilarDesabilitado = styled(BotonAccion)`
+  background-color: #555755; 
   color: white;
 
   &:hover {
