@@ -69,19 +69,11 @@ const FormCliente = () => {
     // Primero intentar insertar en SQL Server
     insertarCliente('http://127.0.0.1:3001/clientes', datosCliente)
       .then(data => {
-        console.log('Cliente agregado en SQL Server:', data);
-        // Aquí capturamos el idCliente devuelto por el backend
-        const idCliente = data.idCliente;
-        console.log('ID del cliente agregado:', idCliente);
-
-        datosCliente.idCliente = idCliente;
-
-      })
-      .then(data => {
         console.log('Cliente agregado en MySQL:', data);
         alert('Cliente agregado con éxito');
 
         resetForm();
+
       })
       .catch(error => {
         console.error('Error:', error);
