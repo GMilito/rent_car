@@ -1,13 +1,29 @@
 
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormTipoTarjeta= () => {
+const FormTipoTarjetaModificar= () => {
   const [tipoTarjeta, setTipoTarjeta] = useState({tipo: ''});
+  const {idTipoTarjeta}=useParams()
+  const cargarTipoTarjeta = () => {
+    if (!idTipoTarjeta) {
+      console.error("No hay ID tipo de tarjeta  proporcionada");
+      return;
+    }
+    fetch(`http://127.0.0.1:3001/tipoTarjetas/${idTipoTarjeta}`)
+      .then(response => response.json())
+      .then(data => {
+        setTipoTarjeta(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+};
 
-
+useEffect(() => {
+    cargarTipoTarjeta()
+    ;
+  }, []);
 
   const handleChange = (e) => {
     setTipoTarjeta({ ...tipoTarjeta, [e.target.name]: e.target.value });
@@ -21,45 +37,37 @@ const FormTipoTarjeta= () => {
       return;
     }
     // Definir una función auxiliar para insertar el cliente en una base de datos
-    const insertarTipoTarjeta = (url, tipoTarjetaData) => {
-      return fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(tipoTarjetaData)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      });
+     // Definir una función auxiliar para insertar el cliente en una base de datos
+     const modificarTipoTarjetas = (tipoData) => {
+        return fetch(`http://127.0.0.1:3001/tipoTarjetas/${idTipoTarjeta}`, {  // Asumiendo que el endpoint correcto para modificar es /clientes/:id
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(tipoData)
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        });
+      };
+      // Construir objeto con datos del cliente a modificar
+      const datosTipoTarjeta = {
+        tipo: tipoTarjeta.tipo
+      };
+      // Intentar modificar el cliente en la base de datos
+      modificarTipoTarjetas(datosTipoTarjeta)
+        .then(data => {
+          console.log('Tipo de Tarjeta modificada con éxito:', data);
+          alert('Tipo de Tarjeta modificada con éxito');
+        })
+        .catch(error => {
+          console.error('Error al modificar el tipo de Tarjeta:', error);
+          alert('Error al modificar el tipo de Tarjeta: ' + error.message);
+        });
     };
-  
-
-    const datosTipoTarjeta = {
-      tipo: tipoTarjeta.tipo,
-    }
-
-    // Primero intentar insertar en SQL Server
-    insertarTipoTarjeta('http://127.0.0.1:3001/tipoTarjetas', datosTipoTarjeta)
-    .then(data => {
-      console.log('Tipo Tarjeta agregado en MySQL:', data);
-      alert('Tipo Tarjeta agregado con éxito.');
-      resetForm(); 
-      console.log('Tipo Tarjeta agregado en SQL Server:', data);
-    })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el tipo de tarjeta. ' + error.message);
-      });
-  };
-  
-const resetForm = () => {
-    setTipoTarjeta({ tipo: ''});
-};
-
 
   return (
     <ContenedorTabla>
@@ -85,7 +93,7 @@ const resetForm = () => {
   );
 };
 
-export default FormTipoTarjeta;
+export default FormTipoTarjetaModificar;
 
 
 
