@@ -21,7 +21,7 @@ const FormVehiculo = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarCombustible = () => {
-    fetch('http://127.0.0.1:3001/combustible')
+    fetch('http://127.0.0.1:3001/combustibles')
       .then(response => response.json())
       .then(data => {
         setCombustibles(data);
@@ -37,7 +37,7 @@ const FormVehiculo = () => {
       .catch(error => console.error("Error al obtener los datos:", error));
   };
   const cargarMarcas = () => {
-    fetch('http://127.0.0.1:3001/marca')
+    fetch('http://127.0.0.1:3001/marcas')
       .then(response => response.json())
       .then(data => {
         setMarcas(data);

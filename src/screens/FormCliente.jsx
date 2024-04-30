@@ -8,7 +8,7 @@ const FormCliente = () => {
   const [cliente, setCliente] = useState({ nombre: '', apellidos: '', telefono: '', identificacion: '', paisResidencia: '', direccion: '', tipoCliente: '' });
   const [paises, setPaises] = useState([])
   const cargarPaises = () => {
-    fetch('http://127.0.0.1:3001/paises')
+    fetch('http://127.0.0.1:3001/pais')
       .then(response => response.json())
       .then(data => {
         setPaises(data);
