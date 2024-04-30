@@ -16,9 +16,9 @@ const FormVehiculoModificar = () => {
    const cargarDatosIniciales = () => {
     Promise.all([
       fetch('http://127.0.0.1:3001/color').then(res => res.json()).then(data => setColores(data)),
-      fetch('http://127.0.0.1:3001/combustible').then(res => res.json()).then(data => setCombustibles(data)),
+      fetch('http://127.0.0.1:3001/combustibles').then(res => res.json()).then(data => setCombustibles(data)),
       fetch('http://127.0.0.1:3001/transmision').then(res => res.json()).then(data => setTransmisiones(data)),
-      fetch('http://127.0.0.1:3001/marca').then(res => res.json()).then(data => setMarcas(data)),
+      fetch('http://127.0.0.1:3001/marcas').then(res => res.json()).then(data => setMarcas(data)),
       fetch('http://127.0.0.1:3001/tipoVehiculo').then(res => res.json()).then(data => setTipoVehiculos(data)),
       fetch(`http://127.0.0.1:3001/vehiculos/${id}`).then(res => {
         if (!res.ok) throw new Error('Network response was not ok');
