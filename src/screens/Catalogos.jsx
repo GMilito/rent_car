@@ -30,6 +30,8 @@ const Catalogos = () => {
         <br></br>
         <BotonAgregar as={Link} to="/AdmSeguro">Seguro</BotonAgregar>
         <br></br>
+        <BotonAgregar as={Link} to="/AdmTipoCliente">Tipo Cliente</BotonAgregar>
+        <br></br>
    
 
       </Contenedor>

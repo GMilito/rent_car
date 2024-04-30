@@ -7,7 +7,7 @@ const AdmTipoCliente = () => {
   const [tipoClientes, setTipoClientes] = useState([]);
   //Neuvo estado para controlar el filtrado de clientes
   const cargarTipoCliente = () => {
-    fetch('http://127.0.0.1:3001/tipoCliente-sql')
+    fetch('http://127.0.0.1:3001/tipoClientes')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -21,16 +21,14 @@ const AdmTipoCliente = () => {
  
 
 
-  const handleDelete = async (id) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
-    
+  const handleDelete = async (idTipoCliente) => {
+    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?"); 
     if (!confirmar) {
       return;
     }
-    
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/tipoCliente/${idTipoCliente}`;
+      const url = `http://127.0.0.1:3001/tipoClientes/${idTipoCliente}`;
       const response = await fetch(url, { method: 'DELETE' });
       const data = await response.json();
       
@@ -46,50 +44,6 @@ const AdmTipoCliente = () => {
   };
   
 
-  //NO BORRAR SE CAE
-  /*const handleActualizarColor = (colorActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(colorActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el color');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${colorActualizado.idColor}`)
-      .then(() => {
-        console.log('Coloractualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
   return (
     
     <ContenedorTabla>
@@ -108,10 +62,10 @@ const AdmTipoCliente = () => {
         {tipoClientes
           .map((tipoCliente) => (
             <Tr key={tipoCliente.idTipoCliente}>
-              <Td>{tipoCliente.idTipoCliente}</Td>
+            <Td><a href={`/AdmTipoCliente/FormTipoClienteModificar/${tipoCliente.idTipoCliente}`}>{tipoCliente.idTipoCliente}</a></Td>
               <Td>{tipoCliente.tipoCliente}</Td>
               <Td>
-                <BotonAccionEliminar onClick={() => handleDelete(tipoCliente.id)}>Eliminar</BotonAccionEliminar>
+                <BotonAccionEliminar onClick={() => handleDelete(tipoCliente.idTipoCliente)}>Eliminar</BotonAccionEliminar>
               </Td>
             </Tr>
         ))}

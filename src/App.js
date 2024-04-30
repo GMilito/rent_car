@@ -23,6 +23,10 @@ import AdmTransmision from './screens/AdmTransmision';
 import FormTransmision from './screens/FormTransmision';
 import AdmSeguro from './screens/AdmSeguro';
 import FormSeguro from './screens/FormSeguro';
+import AdmTipoCliente from './screens/AdmTipoCliente';
+import FormTipoCliente from './screens/FormTipoCliente';
+
+
 
  import {
   BrowserRouter as Router,
@@ -46,7 +50,7 @@ import FormTipoVehiculo from './screens/FormTipoVehiculo';
 import FormTipoVehiculoModificar from './screens/FormTipoVehiculoModificar';
 import FormTransmisionModificar from './screens/FormTransmisionModificar';
 import FormSeguroModificar from './screens/FormSeguroModificar';
-
+import FormTipoClienteModificar from './screens/FormTipoClienteModificar';
 
 
 
@@ -95,6 +99,9 @@ function AppWrapper() {
           <Route path="/AdmSeguro" element={<AdmSeguro/>} />
           <Route path="/AdmSeguro/FormSeguro" element={<FormSeguro/>} />
           <Route path="/AdmSeguro/FormSeguroModificar/:idSeguro" element={<FormSeguroModificar/>}/>
+          <Route path="/AdmTipoCliente" element={<AdmTipoCliente/>} />
+          <Route path="/AdmTipoCliente/FormTipoCliente" element={<FormTipoCliente/>} />
+          <Route path="/AdmTipoCliente/FormTipoClienteModificar/:idTipoCliente" element={<FormTipoClienteModificar/>}/>
       </Routes>
     </div>
   );
