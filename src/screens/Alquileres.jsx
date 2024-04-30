@@ -31,52 +31,42 @@ const Alquileres = () => {
 }
 
 export default Alquileres
-
 const BotonNavegar = styled.button`
-  background-color: #273352; 
-  text-decoration:none;
-  color: white; 
-  padding: 7px 15px;
-  margin:10px;
-  border: none; 
-  border-radius:5px;
-  cursor: pointer; 
-  font-size: 1rem; 
+  background-color: #273352;
+  text-decoration: none;
+  color: white;
+  padding: 10px 20px; /* Aumenté el padding para hacer los botones más grandes */
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+
+  font-size: 1.1rem; /* Aumenté el tamaño de la fuente */
+  transition: opacity 0.3s ease-in-out;
   &:hover {
     opacity: 0.8;
   }
 `;
-const ImgPrincipal = styled.img`
-  max-width:350px;
-`;
+
 const ContenedorPrincipal = styled.div`
-padding:50px;
+  padding: 50px;
 `;
 
 const ContenedorTitulo = styled.div`
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 `;
 
 const Contenedor = styled.div`
-  margin-top:50px;
-  display:flex;
-  flex-flow: row nowrap;
-  div{
-    margin:50px;
-  }
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap; /* Permite que los botones se envuelvan en múltiples líneas */
 `;
-const BotonAgregar = styled.button`
-  background-color: #4CAF50; 
-  text-decoration:none;
-  color: white; 
-  padding: 7px 15px;
-  margin:10px;
-  border: none; 
-  border-radius:5px;
-  cursor: pointer; 
-  font-size: 1rem; 
+
+const BotonAgregar = styled(BotonNavegar)`
+  background-color: #4CAF50;
   &:hover {
-    opacity: 0.8;
+    background-color: #3d8b3d; /* Cambié el color del botón al hacer hover */
   }
 `;
