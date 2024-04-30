@@ -6,10 +6,9 @@ background-color: #ff9900;
 color: white;
 padding: 10px;
 text-align: center;
-position: fixed;
-left: 0;
-bottom: 0;
 width: 100%;
+position: flex;
+bottom: 0;
 `;
 
 const Footer = () => {

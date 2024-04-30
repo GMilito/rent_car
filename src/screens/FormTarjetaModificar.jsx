@@ -79,6 +79,7 @@ const FormTarjetaModificar = ({ tarjeta, onActualizarTarjeta }) => {
   };
 
   return (
+    <ContenedorTabla>
     <FormContainer>
       <StyledForm onSubmit={handleSubmit}>
       <ColumnContainer>
@@ -176,11 +177,15 @@ const FormTarjetaModificar = ({ tarjeta, onActualizarTarjeta }) => {
         <SubmitButton type="submit">Actualizar Tarjeta</SubmitButton>
       </StyledForm>
     </FormContainer>
+    </ContenedorTabla>
   );
 };
 
 export default FormTarjetaModificar;
 
+const ContenedorTabla = styled.div`
+  padding:90px;
+`;
 const FormContainer = styled.div`
   display: flex;
   flex-direction: column;

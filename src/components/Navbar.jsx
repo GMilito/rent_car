@@ -45,9 +45,11 @@ const ContenedorLogo = styled.div`
 `;
 
 const NavContainer = styled.nav`
-  padding: 0.5rem 70px;
+  position: fixed;
+  padding: 10px;
   background-color: #ff9900; /* Naranja pastel claro */
   display: flex;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);

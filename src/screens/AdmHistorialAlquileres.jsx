@@ -159,7 +159,7 @@ const ModalContainer = styled.div`
   }
 `;
 const ContenedorTabla = styled.div`
-  padding:50px;
+  padding:90px;
 
 `;
 const Table = styled.table`

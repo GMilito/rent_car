@@ -6,9 +6,7 @@ import styled from 'styled-components';
 
 const FormTipoTarjeta= () => {
   const [tipoTarjeta, setTipoTarjeta] = useState({tipo: ''});
-
-
-
+  
   const handleChange = (e) => {
     setTipoTarjeta({ ...tipoTarjeta, [e.target.name]: e.target.value });
   };
@@ -90,7 +88,7 @@ export default FormTipoTarjeta;
 
 
 const ContenedorTabla = styled.div`
-  padding:50px;
+  padding:90px;
 
 `;
 const StyledLabel = styled.label`

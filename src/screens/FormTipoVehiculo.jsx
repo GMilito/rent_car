@@ -90,7 +90,7 @@ export default FormTipoVehiculo;
 
 
 const ContenedorTabla = styled.div`
-  padding:50px;
+  padding:90px;
 
 `;
 const StyledLabel = styled.label`

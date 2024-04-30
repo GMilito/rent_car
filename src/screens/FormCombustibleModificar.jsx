@@ -98,7 +98,7 @@ const modificarCombustible = (combustibleData) => {
 export default FormCombustibleModificar;
 
 const ContenedorTabla = styled.div`
-  padding:50px;
+  padding:90px;
 
 `;
 const StyledLabel = styled.label`

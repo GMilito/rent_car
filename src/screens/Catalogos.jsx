@@ -62,7 +62,7 @@ const BotonNavegar = styled.button`
 `;
 
 const ContenedorPrincipal = styled.div`
-  padding: 50px;
+  padding: 90px;
 `;
 
 const ContenedorTitulo = styled.div`

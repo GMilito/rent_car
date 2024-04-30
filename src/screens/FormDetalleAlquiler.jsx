@@ -116,7 +116,7 @@ const resetForm = () => {
 export default FormDetalleAlquiler;
 
 const ContenedorTabla = styled.div`
-  padding:50px;
+  padding:90px;
 
 `;
 const StyledLabel = styled.label`
