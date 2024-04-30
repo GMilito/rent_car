@@ -1,23 +1,22 @@
 import React from 'react'
 import styled from 'styled-components';
-import clientes from '../img/clientes.webp';
-import cuentas from '../img/cuentas.webp';
-import tarjetas from '../img/tarjetas.webp';
-import usuarios from '../img/usuarios.webp';
+import clientes from '../img/satisfaccion-del-consumidor.png';
+import vehiculos from '../img/vehiculos.png';
+import alquiler from '../img/clave.png';
+import catalogo from '../img/revista.png';
 import { Link } from 'react-router-dom';
 
 const Principal = () => {
   return (
     <ContenedorPrincipal>
       <ContenedorTitulo>
-
-        <h2>Bienvenido a la pagina administrativa de x</h2>
-
+        <TituloPrincipal>Bienvenido </TituloPrincipal>
       </ContenedorTitulo>
-      <Contenedor>
+
+      <Seccion>
         <ImgPrincipal src={clientes} alt="" />
-        <div>
-          <h3>Administracion de clientes</h3>
+        <TextoSeccion>
+        <h3> Administración de clientes</h3>
           <p>Esta función permite gestionar la información de los clientes de manera eficiente y ordenada. Al usarla,
             podrás ver un listado completo de tus clientes con detalles como su ID, nombre y apellido. Si necesitas
             agregar un nuevo cliente, simplemente usa el botón “Nuevo” para ingresar sus datos en un formulario.
@@ -27,14 +26,12 @@ const Principal = () => {
             borrados accidentales. En caso de que el cliente no pueda ser eliminado por tener datos asociados,
             la función te informará, garantizando así la integridad de tu base de datos.</p>
           <BotonNavegar as={Link} to="/AdmClientes">IR</BotonNavegar>
-        </div>
+        </TextoSeccion>
+      </Seccion>
 
-      </Contenedor>
-      <Contenedor>
-
-
-        <div>
-          <h3>Registrar cuenta a cliente</h3>
+      <Seccion>
+        <TextoSeccion>
+          <h3> Administracion de vehiculos</h3>
           <p>Esta función es una herramienta de administración de cuentas diseñada para facilitar
             el manejo eficaz de la información financiera de los clientes. Permite visualizar un
             listado detallado de todas las cuentas, incluyendo el número de cuenta, saldo actual,
@@ -46,16 +43,15 @@ const Principal = () => {
             cancelar. Además, se facilita la eliminación de cuentas con un botón específico que solicita
             confirmación para proceder, asegurando la eliminación solo si no existen datos asociados que
             lo impidan, garantizando así la integridad de la gestión de cuentas.</p>
-          <BotonNavegar as={Link} to="/AdmClientes">IR</BotonNavegar>
-        </div>
-        <ImgPrincipal src={cuentas} alt="" />
+          <BotonNavegar as={Link} to="/AdmVehiculos">IR</BotonNavegar>
+        </TextoSeccion>
+        <ImgPrincipal src={vehiculos} alt="" />
+      </Seccion>
 
-      </Contenedor>
-      <Contenedor>
-
-        <ImgPrincipal src={tarjetas} alt="" />
-        <div>
-          <h3>Registrar tarjeta a cliente</h3>
+      <Seccion>
+        <ImgPrincipal src={alquiler} alt="" />
+        <TextoSeccion>
+          <h3>Realizar Alquiler </h3>
           <p>Esta función permite gestionar la información de los clientes de manera eficiente y ordenada. Al usarla,
             podrás ver un listado completo de tus clientes con detalles como su ID, nombre y apellido. Si necesitas
             agregar un nuevo cliente, simplemente usa el botón “Nuevo” para ingresar sus datos en un formulario.
@@ -64,14 +60,13 @@ const Principal = () => {
             un cliente, esta función te ofrece una manera segura de hacerlo, solicitándote confirmación para evitar
             borrados accidentales. En caso de que el cliente no pueda ser eliminado por tener datos asociados,
             la función te informará, garantizando así la integridad de tu base de datos.</p>
-          <BotonNavegar as={Link} to="/AdmClientes">IR</BotonNavegar>
-        </div>
-      </Contenedor>
-      <Contenedor>
+          <BotonNavegar as={Link} to="/Alquileres">IR</BotonNavegar>
+        </TextoSeccion>
+      </Seccion>
 
-
-        <div>
-          <h3>Usuarios</h3>
+      <Seccion>
+        <TextoSeccion>
+          <h3>Administracion de Catalogos</h3>
           <p>Esta función permite gestionar la información de los clientes de manera eficiente y ordenada. Al usarla,
             podrás ver un listado completo de tus clientes con detalles como su ID, nombre y apellido. Si necesitas
             agregar un nuevo cliente, simplemente usa el botón “Nuevo” para ingresar sus datos en un formulario.
@@ -80,35 +75,41 @@ const Principal = () => {
             un cliente, esta función te ofrece una manera segura de hacerlo, solicitándote confirmación para evitar
             borrados accidentales. En caso de que el cliente no pueda ser eliminado por tener datos asociados,
             la función te informará, garantizando así la integridad de tu base de datos.</p>
-          <BotonNavegar as={Link} to="/AdmClientes">IR</BotonNavegar>
-        </div>
-        <ImgPrincipal src={usuarios} alt="" />
-        <br />
-      </Contenedor>
+          <BotonNavegar as={Link} to="/Catalogos">IR</BotonNavegar>
+        </TextoSeccion>
+        <ImgPrincipal src={catalogo} alt="" />
+      </Seccion>
     </ContenedorPrincipal>
   )
 }
 
-export default Principal
+export default Principal;
 
 const BotonNavegar = styled.button`
   background-color: #273352;
   text-decoration: none;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   margin-top: 10px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: opacity 0.3s ease-in-out;
   &:hover {
     opacity: 0.8;
   }
 `;
+const TituloSecundario = styled.h3`
+  font-size: 1.8rem;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+  color: #4CAF50; /* Cambia el color según tus preferencias */
+  margin-bottom: 20px;
+`;
 
 const ImgPrincipal = styled.img`
-  max-width: 300px;
+  max-width: 350px;
 `;
 
 const ContenedorPrincipal = styled.div`
@@ -120,23 +121,22 @@ const ContenedorTitulo = styled.div`
   justify-content: center;
 `;
 
-const Contenedor = styled.div`
+const Seccion = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 50px;
 `;
 
-const Texto = styled.div`
-  margin: 0 50px;
-  text-align: left;
-`;
 
-const Titulo = styled.h2`
-  font-size: 2rem;
+const TituloPrincipal = styled.h2`
+  font-size: 2.5rem;
+  font-weight: 500;
+  font-family: 'Roboto', sans-serif;
+  color: #273352;
   margin-bottom: 30px;
 `;
-
-const Parrafo = styled.p`
-  line-height: 1.6;
+const TextoSeccion = styled.div`
+  margin: 0 50px;
+  text-align: left;
 `;
