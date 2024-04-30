@@ -16,17 +16,19 @@ const Catalogos = () => {
       </ContenedorTitulo>
       <Contenedor>
         
-      <BotonAgregar as={Link} to="/AdmColores">Colores</BotonAgregar>
+      <BotonAgregar as={Link} to="/AdmColores">Color</BotonAgregar>
         <br></br>
-        <BotonAgregar as={Link} to="/AdmPaisResidencia">Paises</BotonAgregar>
+        <BotonAgregar as={Link} to="/AdmPaisResidencia">Pais</BotonAgregar>
         <br></br>
-        <BotonAgregar as={Link} to="/AdmMarcas">Marcas</BotonAgregar>
+        <BotonAgregar as={Link} to="/AdmMarcas">Marca</BotonAgregar>
         <br></br>
-        <BotonAgregar as={Link} to="/AdmCombustibles">Combustibles</BotonAgregar>
+        <BotonAgregar as={Link} to="/AdmCombustibles">Combustible</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/AdmTipoVehiculo">Tipo Vehiculo</BotonAgregar>
         <br></br>
         <BotonAgregar as={Link} to="/AdmTransmision">Transmision</BotonAgregar>
+        <br></br>
+        <BotonAgregar as={Link} to="/AdmSeguro">Seguro</BotonAgregar>
         <br></br>
    
 

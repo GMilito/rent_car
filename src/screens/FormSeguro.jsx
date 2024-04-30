@@ -7,8 +7,6 @@ import styled from 'styled-components';
 const FormSeguro = () => {
   const [seguro, setSeguros] = useState({tipoSeguro: '', montoSeguro: ''});
 
-
-
   const handleChange = (e) => {
     setSeguros({ ...seguro, [e.target.name]: e.target.value });
   };
@@ -91,7 +89,7 @@ const resetForm = () => {
   );
 };
 
-export default FormColor;
+export default FormSeguro;
 
 
 

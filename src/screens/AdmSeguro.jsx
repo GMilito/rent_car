@@ -4,13 +4,11 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-
-
 const AdmSeguro = () => {
   const [seguros, setSeguros] = useState([]);
 
   const cargarSeguros = () => {
-    fetch('http://127.0.0.1:3001/seguros')
+    fetch('http://127.0.0.1:3001/seguro')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
@@ -43,50 +41,7 @@ const AdmSeguro = () => {
     }
   };
   
-  /*NO BORRAR SE CAE
-  const handleActualizarCliente = (clienteActualizado) => {
-    // Función auxiliar para realizar la actualización en una base de datos
-    const actualizarEnBaseDeDatos = (url) => {
-      return fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(clienteActualizado),
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al actualizar el cliente');
-        }
-        return response.json();
-      });
-    };
-  
-    // Actualizar en SQL Server
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-sql/${clienteActualizado.id}`)
-      .then(() => {
-        console.log('Cliente actualizado en SQL Server');
-        
-      })
-      .catch(error => console.error('Error al actualizar en SQL Server:', error));
-  
-    // Actualizar en MySQL
-    actualizarEnBaseDeDatos(`http://127.0.0.1:3001/clientes-mysql/${clienteActualizado.id}`)
-      .then(() => {
-        console.log('Cliente actualizado en MySQL');
-        
-      })
-      .catch(error => console.error('Error al actualizar en MySQL:', error));
-  
-    // Opcional: actualiza el estado de la lista de clientes si ambas operaciones son independientes
-    // y no necesitas confirmar que ambas fueron exitosas para actualizar el estado
-    const indice = clientes.findIndex(cliente => cliente.id === clienteActualizado.id);
-    const clientesActualizados = [...clientes];
-    clientesActualizados[indice] = clienteActualizado;
-    setClientes(clientesActualizados);
-  };
-  
-*/
+ 
   return (
     <ContenedorTabla>
       <h1>Administación de Seguros</h1>
@@ -104,7 +59,7 @@ const AdmSeguro = () => {
         {seguros
           .map((seguro) => (
             <Tr key={seguro.idSeguro}>
-              <Td>{seguro.idSeguro}</Td>
+            <Td><a href={`/AdmSeguro/FormSeguroModificar/${seguro.idSeguro}`}>{seguro.idSeguro}</a></Td>
               <Td>{seguro.tipoSeguro}</Td>
               <Td>{seguro.montoSeguro}</Td>
               <Td>

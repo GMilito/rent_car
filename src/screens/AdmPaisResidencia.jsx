@@ -3,9 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
+
 const AdmPaisResidencia = () => {
   const [paises, setPaises] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
+ 
+
   const cargarPaises = () => {
     fetch('http://127.0.0.1:3001/pais')
       .then(response => response.json())
