@@ -3,110 +3,141 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 const AdmDetallesAlquiler = () => {
-    const [alquileres, setAlquileres] = useState([]);
-    const [error, setError] = useState(false);
-    const [clientes, setClientes] = useState([]);
-    const [vehiculos, setVehiculos] = useState([]);
-    const [seguros, setSeguros] = useState([]);
+  const [alquileres, setAlquileres] = useState([]);
+  const [error, setError] = useState(false);
+  const [clientes, setClientes] = useState([]);
+  const [vehiculos, setVehiculos] = useState([]);
+  const [seguros, setSeguros] = useState([]);
 
-    const cargarAlquileres = () => {
-        fetch('http://127.0.0.1:3001/alquiler')
-            .then(response => response.json())
-            .then(data => {
-                if (Array.isArray(data)) {
-                    setAlquileres(data);
-                } else {
-                    setError(true);
-                    console.error("Error en el formato de los datos:", data);
-                }
-            })
-            .catch(error => {
-                setError(true);
-                console.error("Error al obtener los datos:", error);
-            });
-    };
-    const cargarClientes = () => {
-      fetch('http://127.0.0.1:3001/clientes')
-        .then(response => response.json())
-        .then(data => {
-          setClientes(data);
-        })
-        .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarVehiculos = () => {
-      fetch('http://127.0.0.1:3001/vehiculos')
-        .then(response => response.json())
-        .then(data => {
-          setVehiculos(data);
-        })
-        .catch(error => console.error("Error al obtener los datos:", error));
-    };
-    const cargarSeguros = () => {
-      fetch('http://127.0.0.1:3001/seguros')
-        .then(response => response.json())
-        .then(data => {
-          setSeguros(data);
-        })
-        .catch(error => console.error("Error al obtener los datos:", error));
-    };
+  const cargarAlquileres = () => {
+    fetch('http://127.0.0.1:3001/alquiler')
+      .then(response => response.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAlquileres(data);
+        } else {
+          setError(true);
+          console.error("Error en el formato de los datos:", data);
+        }
+      })
+      .catch(error => {
+        setError(true);
+        console.error("Error al obtener los datos:", error);
+      });
+  };
+  const cargarClientes = () => {
+    fetch('http://127.0.0.1:3001/clientes')
+      .then(response => response.json())
+      .then(data => {
+        setClientes(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarVehiculos = () => {
+    fetch('http://127.0.0.1:3001/vehiculos')
+      .then(response => response.json())
+      .then(data => {
+        setVehiculos(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
+  const cargarSeguros = () => {
+    fetch('http://127.0.0.1:3001/seguros')
+      .then(response => response.json())
+      .then(data => {
+        setSeguros(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
+  };
 
-    useEffect(() => {
-        cargarAlquileres();
-        cargarVehiculos();
-        cargarSeguros();
-        cargarClientes();
-    }, []);
+  useEffect(() => {
+    cargarAlquileres();
+    cargarVehiculos();
+    cargarSeguros();
+    cargarClientes();
+  }, []);
+  // Función para finalizar alquiler
+  const finalizarAlquiler = async (idAlquiler) => {
+    const confirmar = window.confirm("¿Realmente desea devolver este vehiculo?");
 
+    if (!confirmar) {
+      return;
+    }
+    try {
+      const response = await fetch('http://127.0.0.1:3001/finalizarAlquiler', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idAlquiler })
+      });
 
-    return (
-        <ContenedorTabla>
-            <h1>Alquileres activos</h1>
-            {alquileres.length > 0 ? (
-             
-                <Table>
-                    <thead>
-                        <Tr>
-                            <Th>Id Alquiler</Th>
-                            <Th>Cliente</Th>
-                            <Th>Fecha Alquiler</Th>
-                            <Th>Fecha Entrega</Th>
-                            <Th>ID Vehiculo</Th>
-                            <Th>Seguro</Th>
-                            <Th>Monto</Th>
-                            <Th></Th>
-                        </Tr>
-                    </thead>
-                    <tbody>
-                        {alquileres.map((alquiler) => {
-                            
-                            const cliente = clientes.find(c => c.id === alquiler.idCliente);
-                            const vehiculo = vehiculos.find(v => v.idVehiculo === alquiler.idVehiculo);
-                            const seguro = seguros.find(s => s.idSeguro === alquiler.idSeguro);
+      const data = await response.json();
+      if (response.ok) {
+        alert('Alquiler finalizado correctamente');
+        cargarAlquileres(); // Recargar los alquileres para reflejar cambios
+      } else {
+        throw new Error(data.message || "Error al finalizar alquiler");
+      }
+    } catch (error) {
+      console.error("Error al finalizar el alquiler:", error);
+      alert(error.message);
+    }
+  };
 
-                            return (
-                                <Tr key={alquiler.idAlquiler}>
-                                    <Td>{alquiler.idAlquiler}</Td>
-                                    <Td>{cliente ? `${cliente.identificacion} - ${cliente.nombre} ${cliente.apellidos}` : 'No disponible'}</Td>
-                                    <Td>{alquiler.fechaAlquiler}</Td>
-                                    <Td>{alquiler.fechaEntrega}</Td>
-                                    <Td>{vehiculo ? vehiculo.idVehiculo : 'No disponible'}</Td>
-                                    <Td>{seguro ? seguro.tipoSeguro : 'No disponible'}</Td>
-                                    <Td>{`${alquiler.monto}$`}</Td>
-                                    <Td><BotonDevolver>Devolver</BotonDevolver></Td>
-                                </Tr>
-                            );
-                        })}
-                    </tbody>
-                </Table>
-            ) : (
-              <div>
-                <div>No hay alquileres activos.</div>
-                <br />
-                <BotonCancelar as={Link} to="/Alquileres">Regresar</BotonCancelar>
-              </div>                
-            )}
-        </ContenedorTabla>
-    );
+  return (
+    <ContenedorTabla>
+      <h1>Alquileres activos</h1>
+      {alquileres.length > 0 ? (
+
+        <Table>
+          <thead>
+            <Tr>
+              <Th>Id Alquiler</Th>
+              <Th>Cliente</Th>
+              <Th>Fecha Alquiler</Th>
+              <Th>Fecha Entrega</Th>
+              <Th>ID Vehiculo</Th>
+              <Th>Seguro</Th>
+              <Th>Monto</Th>
+              <Th></Th>
+            </Tr>
+          </thead>
+          <tbody>
+            {alquileres.map((alquiler) => {
+
+              const cliente = clientes.find(c => c.id === alquiler.idCliente);
+              const vehiculo = vehiculos.find(v => v.idVehiculo === alquiler.idVehiculo);
+              const seguro = seguros.find(s => s.idSeguro === alquiler.idSeguro);
+
+              return (
+                <Tr key={alquiler.idAlquiler}>
+                  <Td>{alquiler.idAlquiler}</Td>
+                  <Td>{cliente ? `${cliente.identificacion} - ${cliente.nombre} ${cliente.apellidos}` : 'No disponible'}</Td>
+                  <Td>{alquiler.fechaAlquiler}</Td>
+                  <Td>{alquiler.fechaEntrega}</Td>
+                  <Td>{vehiculo ? vehiculo.idVehiculo : 'No disponible'}</Td>
+                  <Td>{seguro ? seguro.tipoSeguro : 'No disponible'}</Td>
+                  <Td>{`${alquiler.monto}$`}</Td>
+                  <Td>
+                    <BotonDevolver onClick={() => finalizarAlquiler(alquiler.idAlquiler)}>
+                      Devolver
+                    </BotonDevolver>
+                  </Td>
+                </Tr>
+              );
+            })}
+          </tbody>
+        </Table>
+      ) : (
+        <div>
+          <div>No hay alquileres activos.</div>
+          <br />
+          <BotonCancelar as={Link} to="/Alquileres">Regresar</BotonCancelar>
+        </div>
+      )}
+    </ContenedorTabla>
+  );
 };
 
 export default AdmDetallesAlquiler;

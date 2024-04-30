@@ -56,7 +56,7 @@ const AdmDetallesAlquiler = () => {
               <Td>{detalleAlquiler.idSeguro}</Td>
            
               <Td>{detalleAlquiler.fechaDevolucion}</Td>
-              <Td>{detalleAlquiler.montoTotal + detalleAlquiler.monto}</Td>
+              <Td>{detalleAlquiler.montoTotal }</Td>
             </Tr>
         ))}
         </tbody>
