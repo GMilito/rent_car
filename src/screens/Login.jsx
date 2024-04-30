@@ -1,8 +1,7 @@
-// src/screens/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-
+import inicio from '../img/contrasena.png';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,47 +12,51 @@ const Login = () => {
     
     alert("Bienvenido "+username);
     navigate('/Principal');
-    
   };
 
   return (
-    <ContenedorTabla>
+    <Container>
       <h1>Login</h1>
       <FormContainer>
-        
         <StyledForm onSubmit={handleLogin}>
-            <StyledLabel>
+          <InputLabel>
             Username:
             <StyledInput type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </StyledLabel>
-       
-        <StyledLabel>
+          </InputLabel>
+          <InputLabel>
             Password:
             <StyledInput type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </StyledLabel>
-          <ContenedorBotones>
-            <BotonAgregar type="submit">Login</BotonAgregar>
-      
-          </ContenedorBotones>
+          </InputLabel>
+          <ButtonContainer>
+            <ButtonPrimary type="submit">Login</ButtonPrimary>
+          </ButtonContainer>
+          <ImageContainer>
+            <StyledImage src={inicio} alt="" />
+          </ImageContainer>
         </StyledForm>
       </FormContainer>
-    </ContenedorTabla>
-
+    </Container>
   );
 };
 
 export default Login;
 
-const ContenedorTabla = styled.div`
-  padding:50px;
-
+const Container = styled.div`
+  padding: 15px;
+  height: 82vh; /* Altura del contenedor */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
-const StyledLabel = styled.label`
+
+const InputLabel = styled.label`
   margin-bottom: 5px;
   font-weight: bold;
 `;
-const ContenedorBotones = styled.div`
-  display:flex;
+
+const ButtonContainer = styled.div`
+  display: flex;
   flex-flow: row nowrap;
 `;
 
@@ -62,14 +65,17 @@ const FormContainer = styled.div`
   flex-direction: row;
   padding: 20px;
   background-color: #f8f8f8;
-  justify-content:center;
+  justify-content: center;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 100vh; /* Altura del contenedor del formulario */
+  max-height: 60vh; /* Altura máxima del contenedor del formulario */
+  overflow-y: auto; /* Agregar desplazamiento vertical si el contenido excede la altura */
 `;
 
 const StyledForm = styled.form`
   display: flex;
-  max-width:500px;
+  max-width: 500px;
   flex-direction: column;
   gap: 15px;
 `;
@@ -84,9 +90,9 @@ const StyledInput = styled.input`
   }
 `;
 
-const BotonAccion = styled.button`
-  text-decoration:none;
-  font-weight:bold;
+const ButtonBase = styled.button`
+  text-decoration: none;
+  font-weight: bold;
   padding: 5px 10px;
   margin: 0 5px;
   border: none;
@@ -100,19 +106,29 @@ const BotonAccion = styled.button`
   }
 `;
 
-const BotonCancelar = styled(BotonAccion)`
-  background-color: #FF6347; 
-  color: white;
-
-  &:hover {
-    background-color: #E55347; 
-  }
-`;
-const BotonAgregar = styled(BotonAccion)`
-  background-color: #007bff; 
+const ButtonPrimary = styled(ButtonBase)`
+  background-color: #007bff;
   color: white;
 
   &:hover {
     background-color: #0056b3;
   }
+`;
+
+const ButtonDanger = styled(ButtonBase)`
+  background-color: #ff6347;
+  color: white;
+
+  &:hover {
+    background-color: #e55347;
+  }
+`;
+const ImageContainer = styled.div`
+  text-align: center;
+  margin-top: 20px;
+`;
+
+const StyledImage = styled.img`
+  width: 200px; /* Ancho deseado */
+  height: auto; /* Altura automática para mantener la proporción */
 `;

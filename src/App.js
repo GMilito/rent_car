@@ -2,6 +2,7 @@
 import './App.css';
 
 import Navbar from './components/Navbar';
+import Footer from './components/footer';
 import AdmClientes from './screens/AdmClientes'; 
 import AdmVehiculos from './screens/AdmVehiculos';
 import AdmColores from './screens/AdmColores';
@@ -103,6 +104,7 @@ function AppWrapper() {
           <Route path="/AdmTipoCliente/FormTipoCliente" element={<FormTipoCliente/>} />
           <Route path="/AdmTipoCliente/FormTipoClienteModificar/:idTipoCliente" element={<FormTipoClienteModificar/>}/>
       </Routes>
+      {<Footer />}
     </div>
   );
 }
