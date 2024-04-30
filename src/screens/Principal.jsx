@@ -11,7 +11,7 @@ const Principal = () => {
     <ContenedorPrincipal>
       <ContenedorTitulo>
 
-        <h2>Bienvenido a la pagina administrativa del Banco ABC</h2>
+        <h2>Bienvenido a la pagina administrativa de x</h2>
 
       </ContenedorTitulo>
       <Contenedor>
@@ -83,6 +83,7 @@ const Principal = () => {
           <BotonNavegar as={Link} to="/AdmClientes">IR</BotonNavegar>
         </div>
         <ImgPrincipal src={usuarios} alt="" />
+        <br />
       </Contenedor>
     </ContenedorPrincipal>
   )
@@ -91,36 +92,51 @@ const Principal = () => {
 export default Principal
 
 const BotonNavegar = styled.button`
-  background-color: #273352; 
-  text-decoration:none;
-  color: white; 
-  padding: 7px 15px;
-  margin:10px;
-  border: none; 
-  border-radius:5px;
-  cursor: pointer; 
-  font-size: 1rem; 
+  background-color: #273352;
+  text-decoration: none;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.3s ease-in-out;
   &:hover {
     opacity: 0.8;
   }
 `;
+
 const ImgPrincipal = styled.img`
-  max-width:350px;
+  max-width: 300px;
 `;
+
 const ContenedorPrincipal = styled.div`
-padding:50px;
+  padding: 50px;
 `;
 
 const ContenedorTitulo = styled.div`
-  display:flex;
-  justify-content:center;
+  display: flex;
+  justify-content: center;
 `;
 
 const Contenedor = styled.div`
-  margin-top:50px;
-  display:flex;
-  flex-flow: row nowrap;
-  div{
-    margin:50px;
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+`;
+
+const Texto = styled.div`
+  margin: 0 50px;
+  text-align: left;
+`;
+
+const Titulo = styled.h2`
+  font-size: 2rem;
+  margin-bottom: 30px;
+`;
+
+const Parrafo = styled.p`
+  line-height: 1.6;
 `;

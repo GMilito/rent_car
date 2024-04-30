@@ -39,34 +39,19 @@ const FormTipoCliente = () => {
       tipoCliente: tipoCliente.tipoCliente,
     }
     // Primero intentar insertar en SQL Server
-    insertarTipoCliente('http://127.0.0.1:3001/tipoCliente-sql', datosTipoCliente)
+    insertarTipoCliente('http://127.0.0.1:3001/tipoClientes', datosTipoCliente)
       .then(data => {
-        console.log('Tipo cliente agregado en SQL Server:', data);
-        // Aquí capturamos el idCliente devuelto por el backend
-        const idTipoCliente = data.tipoCliente;
-        console.log('ID del tipo de cliente agregado:', idTipoCliente);
-
-       
-        // Esto depende de cómo esté configurado tu backend para manejar estas inserciones
-        datosTipoCliente.idTipoCliente = idTipoCliente;
-  
-        // Luego, si el primero tiene éxito, intentar insertar en MySQL (ajusta según tu lógica)
-        return insertarTipoCliente('http://127.0.0.1:3001/tipoCliente-mysql', datosTipoCliente);
-      })
-      .then(data => {
-        console.log('Marca agregado en MySQL:', data);
-        alert('Tipo deCliente agregado con éxito en ambas bases de datos');
-     
+        console.log('Tipo Vehiculo agregada en MySQL:', data);
+        alert('Tipo Vehiculo agregada con éxito.');
         resetForm(); 
+        console.log('Tipo Vehiculo agregado en SQL Server:', data);
       })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('Error al agregar el tipo de cliente. ' + error.message);
-      });
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error al agregar el tipo vehiculo. ' + error.message);
+        });
   };
   
-  
-
 
 const resetForm = () => {
     setTipoClientes({ tipoCliente: ''});
@@ -81,7 +66,7 @@ const resetForm = () => {
           <StyledLabel>Tipo:</StyledLabel>
           <StyledInput
             type="text"
-            name="tipo"
+            name="tipoCliente"
             value={tipoCliente.tipoCliente}
             onChange={handleChange}
             placeholder="Tipo Cliente"
