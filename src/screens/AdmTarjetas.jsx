@@ -4,140 +4,93 @@ import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-////////linea 7 cambio prueba/////
-
-const AdmClientes = () => {
-  const [clientes, setClientes] = useState([]);
-  const [paises, setPaises] = useState([]);
-  const [tiposClientes, setTiposClientes] = useState([]);
-  //Neuvo estado para controlar el filtrado de clientes
-  const [filtroCedula, setFiltroCedula] = useState('');
-
-
-  const cargarClientes = () => {
-    fetch('http://127.0.0.1:3001/clientes')
+const AdmTarjetas = () => {
+  const [tarjetas, setTarjetas] = useState([]);
+  const [tipoTarjetas, setTipoTarjetas] =useState([])  //Neuvo estado para controlar el filtrado de clientes
+  const cargarTarjetas = () => {
+    fetch('http://127.0.0.1:3001/tarjetas')
       .then(response => response.json())
       .then(data => {
         console.log(data); // Esto debería mostrar los datos en la consola
-        setClientes(data);
+        setTarjetas(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
-
   };
-  const cargarTipoCliente = () => {
-    fetch('http://127.0.0.1:3001/tipoClientes')
+  const cargarTipoTarjeta = () => {
+    fetch('http://127.0.0.1:3001/tipoTarjetas')
       .then(response => response.json())
       .then(data => {
-        setTiposClientes(data);
-        console.log("tipos clientes")
-        console.log(data)
+        console.log(data); // Esto debería mostrar los datos en la consola
+        setTipoTarjetas(data);
       })
       .catch(error => console.error("Error al obtener los datos:", error));
   };
-  const cargarPaises = () => {
-    fetch('http://127.0.0.1:3001/pais')
-      .then(response => response.json())
-      .then(data => {
-        setPaises(data);
-
-      })
-      .catch(error => console.error("Error al obtener los datos:", error));
-  };
-
   useEffect(() => {
-    cargarClientes();
-    cargarPaises();
-    cargarTipoCliente();
+    cargarTarjetas();
+    cargarTipoTarjeta();
   }, []);
-
-
-
-  const handleDelete = async (id) => {
-    const confirmar = window.confirm("¿Realmente desea eliminar el cliente seleccionado?");
-
+ 
+  const handleDelete = async (numeroTarjeta) => {
+    const confirmar = window.confirm("¿Realmente desea eliminar el registro seleccionado?");
+    
     if (!confirmar) {
       return;
     }
-
+    
     try {
       // Usa el nuevo endpoint que maneja ambas bases de datos
-      const url = `http://127.0.0.1:3001/clientes/${id}`;
+      const url = `http://127.0.0.1:3001/tarjetas/${numeroTarjeta}`;
       const response = await fetch(url, { method: 'DELETE' });
-      const data = await response.json();
-
+      const data = await response.json(); 
       if (!response.ok) throw new Error(data.message || 'Falló la solicitud de eliminación');
-      console.log('Cliente eliminado:', data.message);
-
+      console.log('Tarjeta eliminada:', data.message);
       // Actualiza el estado de clientes en la UI después de la eliminación exitosa
-      setClientes(prevClientes => prevClientes.filter(cliente => cliente.id !== id));
+      setTarjetas(prevTarjetas=> prevTarjetas.filter(tarjeta => tarjeta.numeroTarjeta !== numeroTarjeta));
     } catch (error) {
-      console.error('Error al eliminar el cliente:', error);
-      alert(`Error al eliminar el cliente: ${error.message}`);
+      console.error('Error al eliminar la tarjeta:', error);
+      alert(`Error al eliminar la tarjeta: ${error.message}`);
     }
   };
-
-
-
   return (
-
+    
     <ContenedorTabla>
-      <h1>Administación de clientes</h1>
-
-      <BotonAgregar as={Link} to="/AdmClientes/FormCliente">Nuevo</BotonAgregar>
-      <StyledInput
-        type="text"
-        placeholder="Identificación"
-        value={filtroCedula}
-        onChange={(e) => setFiltroCedula(e.target.value)}
-      />
-
+      <h1>Administación de Tarjetas</h1>
+      <BotonAgregar as={Link} to="/AdmTarjetas/FormTarjeta">Nuevo</BotonAgregar>
+      <br></br>
       <Table>
         <thead>
           <Tr>
-            <Th>ID</Th>
-            <Th>Nombre</Th>
-            <Th>Apellido</Th>
-            <Th>Telefono</Th>
-            <Th>Identificacion</Th>
-            <Th>Pais residencia</Th>
-            <Th>Direccion</Th>
-            <Th>Tipo de Cliente</Th>
+            <Th>Numero de Tarjeta</Th>
+            <Th>PIN</Th>
+            <Th>CVV</Th>
+            <Th>Fecha de Vencimiento</Th>
+            <Th>Tipo Tarjeta</Th>
             <Th></Th>
           </Tr>
         </thead>
         <tbody>
-          {clientes
-            .filter((cliente) => cliente.identificacion.includes(filtroCedula))
-            .map((cliente) => {
-              const pais = paises.find(p => p.idPais === cliente.idPaisResidencia);  // Encuentra el país correspondiente al ID
-              const tipoCliente = tiposClientes.find(t => t.idTipoCliente === cliente.tipoCliente);
-              console.log("TIPO CLIENTE")
-              console.log(tipoCliente)
-              return (
-                <Tr key={cliente.id}>
-                  <Td><a href={`/AdmClientes/FormClienteModificar/${cliente.id}`}>{cliente.id}</a></Td>
-                  <Td>{cliente.nombre}</Td>
-                  <Td>{cliente.apellidos}</Td>
-                  <Td>{cliente.telefono}</Td>
-                  <Td>{cliente.identificacion}</Td>
-                  <Td>{pais ? pais.nombrePais : 'No disponible'}</Td> 
-                  <Td>{cliente.direccion}</Td>
-                  <Td>{tipoCliente ? tipoCliente.tipoCliente : 'No disponible'}</Td>
-                  <Td>
-                    <BotonAccionEliminar as={Link} to={`/AdmClientes/AdmTarjetas/${cliente.id}`}>Ver tarjetas</BotonAccionEliminar>
-                    <BotonAccionEliminar onClick={() => handleDelete(cliente.id)}>Eliminar</BotonAccionEliminar>
-                  </Td>
-                </Tr>
-              );
-            })}
+        {tarjetas
+          .map((tarjeta) => {
+            const tipoTarjeta = tipoTarjetas.find(tipoTarjetas => tipoTarjetas.idTipoTarjeta === tarjeta.idTipoTarjeta);
+            
+            <Tr key={tarjeta.numeroTarjeta}>
+               <Td><a href={`/AdmTarjetas/FormTarjetaModificar/${tarjeta.numeroTarjeta}`}>{tarjeta.numeroTarjeta}</a></Td>
+              <Td>{tarjeta.PIN}</Td>
+              <Td>{tarjeta.CVV}</Td>
+              <Td>{tarjeta.fechaVencimiento}</Td>
+              <Td>{tipoTarjeta ? tipoTarjeta.tipo : 'No disponible'}</Td>
+              <Td>
+                <BotonAccionEliminar onClick={() => handleDelete(tarjeta.numeroTarjeta)}>Eliminar</BotonAccionEliminar>
+              </Td>
+            </Tr>
+        })}
         </tbody>
       </Table>
     </ContenedorTabla>
   );
 };
 
-export default AdmClientes;
-
+export default AdmTarjetas;
 // Styled-components para la tabla, ajusta según tus necesidades
 // Estilos de los componentes
 const StyledInput = styled.input`
@@ -231,8 +184,6 @@ const ModalContainer = styled.div`
 `;
 const ContenedorTabla = styled.div`
   padding:90px;
-  
-
 
 `;
 const Table = styled.table`

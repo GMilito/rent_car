@@ -141,9 +141,7 @@ const TextoSeccion = styled.div`
 `;
 
 const DescripcionSeccion = styled.p`
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 5px;
-  background-color: #f8f8f8;
+  padding: 20px;
   margin-bottom: 10px;
+  font-size:17px;
 `;

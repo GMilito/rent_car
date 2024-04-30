@@ -1,30 +1,27 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 import styled from 'styled-components';
 
-const FormTarjetaModificar = () => {
-  const [tarjetas, setTarjetas] = useState({numeroTarjeta: '', PIN:'', CVV:'', idCliente:'', idTipoTarjeta:''});
+const FormTarjeta = () => {
+  const [tarjetas, setTarjetas] = useState({numeroTarjeta: '', PIN:'', CVV:'', fechaVencimiento:'', idCliente:'', idTipoTarjeta:''});
   const [tipoTarjetas, setTipoTarjetas] =useState([]) 
-  const { numeroTarjeta } = useParams();
-  const cargarDatosIniciales = () => {
-    Promise.all([
-      fetch('http://127.0.0.1:3001/tipoTarjetas').then(res => res.json()).then(data => setTipoTarjetas(data)),
-      fetch(`http://127.0.0.1:3001/tarjetas/${numeroTarjeta}`).then(res => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.json();
-      }).then(data => {
-        console.log("carga exitosa")
-        setTarjetas(data);
-        console.log(data)
-      }).catch(error => console.error("Error al obtener los datos de Tarjetas:", error))
-    ]).catch(error => console.error("Error al cargar datos iniciales:", error));
+
+  const cargarTipoTarjeta = () => {
+    fetch('http://127.0.0.1:3001/tipoTarjetas')
+      .then(response => response.json())
+      .then(data => {
+        setTipoTarjetas(data);
+      })
+      .catch(error => console.error("Error al obtener los datos:", error));
   };
+ 
 
   useEffect(() => {
-    cargarDatosIniciales();
+    cargarTipoTarjeta();
   }, []);
+
 
 
   const handleChange = (e) => {
@@ -34,19 +31,20 @@ const FormTarjetaModificar = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!tarjetas.numeroTarjeta || !tarjetas.PIN || !tarjetas.CVV || !tarjetas.idTipoTarjeta|| !tarjetas.idCliente) {
+    if (!tarjetas.numeroTarjeta || !tarjetas.PIN || !tarjetas.CVV || !tarjetas.fechaVencimiento || !tarjetas.idTipoTarjeta|| !tarjetas.idCliente) {
       console.error('Todos los campos son obligatorios');
       return;
     }
 
 
-    const modificarTarjeta = (url, vehiculoData) => {
+    // Definir una función auxiliar para insertar el cliente en una base de datos
+    const insertarTarjeta = (url, tarjetaData) => {
       return fetch(url, {
-        method: 'PUT',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(vehiculoData)
+        body: JSON.stringify(tarjetaData)
       })
         .then(response => {
           if (!response.ok) {
@@ -56,30 +54,31 @@ const FormTarjetaModificar = () => {
         });
     };
 
+
     const datosTarjeta = {
       numeroTarjeta: tarjetas.numeroTarjeta,
       PIN: tarjetas.PIN ,
       CVV: tarjetas.CVV,
+      fechaVencimiento: tarjetas.fechaVencimiento,
       idCliente: tarjetas.idCliente,
       idTipoTarjeta: tarjetas.idTipoTarjeta
     };
 
-    const TarjetaUrl = `http://127.0.0.1:3001/tarjetas/${numeroTarjeta
-      }`;
-    modificarTarjeta(TarjetaUrl, datosTarjeta)
+    // Primero intentar insertar en SQL Server
+    insertarTarjeta('http://127.0.0.1:3001/tarjetas', datosTarjeta)
       .then(data => {
-        console.log('Tarjeta modificada en SQL Server:', data);
-        alert('Tarjeta modificada con éxito');
+        console.log('Tarjetas agregado en SQL Server:', data);
+        alert('Tarjetas agregado con éxito');
         resetForm();
       })
       .catch(error => {
         console.error('Error:', error);
-        alert('Error al modificar la tarjeta. ' + error.message);
+        alert('Error al agregar la tarjeta. ' + error.message);
       });
   };
 
   const resetForm = () => {
-    setTarjetas({ numeroTarjeta: '', PIN:'', CVV:'', idCliente:'', idTipoTarjeta:''});
+    setTarjetas({ numeroTarjeta: '', PIN:'', CVV:'', fechaVencimiento:'', idCliente:'', idTipoTarjeta:''});
   };
 
 
@@ -115,6 +114,15 @@ const FormTarjetaModificar = () => {
             placeholder="CVV"
             required
           />
+           <StyledLabel>Fecha Vencimiento:</StyledLabel>
+          <StyledInput
+            type="date"
+            name="fechaVencimiento"
+            value={tarjetas.fechaVencimiento}
+            onChange={handleChange}
+            placeholder="Fecha de vencimiento"
+            required
+          />
           <StyledLabel>Identificacion del Cliente:</StyledLabel>
           <StyledInput
             type="number"
@@ -134,7 +142,7 @@ const FormTarjetaModificar = () => {
             <option value="">Seleccione un tipo</option>
             {tipoTarjetas
               .map((tv) => (
-                <option value={tv.idTipoTarjeta}>{tv.idTipoTarjeta}</option>
+                <option value={tv.idTipoTarjeta}>{tv.tipo}</option>
               ))}
           </StyledSelect>
 
@@ -148,7 +156,7 @@ const FormTarjetaModificar = () => {
   );
 };
 
-export default FormTarjetaModificar;
+export default FormTarjeta;
 
 const ContenedorTabla = styled.div`
   padding:90px;

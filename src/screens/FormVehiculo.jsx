@@ -230,8 +230,6 @@ const FormVehiculo = () => {
 
 export default FormVehiculo;
 
-
-
 const ContenedorTabla = styled.div`
   padding:90px;
 
