@@ -26,7 +26,8 @@ import AdmSeguro from './screens/AdmSeguro';
 import FormSeguro from './screens/FormSeguro';
 import AdmTipoCliente from './screens/AdmTipoCliente';
 import FormTipoCliente from './screens/FormTipoCliente';
-
+import AdmTipoTarjeta from './screens/AdmTipoTarjeta';
+import FormTipoTarjeta from './screens/FormTipoTarjeta';
 
 
  import {
@@ -52,7 +53,7 @@ import FormTipoVehiculoModificar from './screens/FormTipoVehiculoModificar';
 import FormTransmisionModificar from './screens/FormTransmisionModificar';
 import FormSeguroModificar from './screens/FormSeguroModificar';
 import FormTipoClienteModificar from './screens/FormTipoClienteModificar';
-
+import FormTipoTarjetaModificar from './screens/FormTipoTarjetaModificar';
 
 
 
@@ -103,6 +104,9 @@ function AppWrapper() {
           <Route path="/AdmTipoCliente" element={<AdmTipoCliente/>} />
           <Route path="/AdmTipoCliente/FormTipoCliente" element={<FormTipoCliente/>} />
           <Route path="/AdmTipoCliente/FormTipoClienteModificar/:idTipoCliente" element={<FormTipoClienteModificar/>}/>
+          <Route path="/AdmTipoTarjeta" element={<AdmTipoTarjeta/>} />
+          <Route path="/AdmTipoTarjeta/FormTipoTarjeta" element={<FormTipoTarjeta/>} />
+          <Route path="/AdmTipoTarjeta/FormTipoTarjetaModificar/:idTipoTarjeta" element={<FormTipoTarjetaModificar/>}/>
       </Routes>
       {<Footer />}
     </div>

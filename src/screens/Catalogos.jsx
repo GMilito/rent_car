@@ -32,6 +32,8 @@ const Catalogos = () => {
         <br></br>
         <BotonAgregar as={Link} to="/AdmTipoCliente">Tipo Cliente</BotonAgregar>
         <br></br>
+        <BotonAgregar as={Link} to="/AdmTipoTarjeta">Tipo Tarjeta</BotonAgregar>
+        <br></br>
    
 
       </Contenedor>
