@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 
@@ -8,7 +8,10 @@ const FormAlquiler = () => {
     const [alquiler, setAlquiler] = useState([]);
     const [clientes, setClientes] = useState([]);
     const [seguros, setSeguros] = useState([]);
+    const [recibo, setRecibo] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const [filtroCedula, setFiltroCedula] = useState('');
+    const { idVehiculo } = useParams();
 
     const cargarClientes = () => {
         fetch('http://127.0.0.1:3001/clientes')
@@ -19,8 +22,28 @@ const FormAlquiler = () => {
             })
             .catch(error => console.error("Error al obtener los datos:", error));
     };
+
+    const cargarSeguros = () => {
+        fetch('http://127.0.0.1:3001/seguros')
+            .then(response => response.json())
+            .then(data => {
+                setSeguros(data);
+            })
+            .catch(error => console.error("Error al obtener los datos:", error));
+    };
+    const obtenerRecibo = (idAlquiler) => {
+        fetch(`http://127.0.0.1:3001/generarReciboAlquiler/${idAlquiler}`)
+            .then(response => response.json())
+            .then(data => {
+                setRecibo(data.recibo); // Asumiendo que la respuesta tiene un objeto 'recibo'
+                setShowModal(true); // Muestra el modal
+            })
+            .catch(error => console.error("Error al obtener el recibo:", error));
+    };
+
     useEffect(() => {
         cargarClientes();
+        cargarSeguros();
     }, []);
 
     const handleChange = (e) => {
@@ -30,7 +53,7 @@ const FormAlquiler = () => {
             setAlquiler({ ...alquiler, [e.target.name]: e.target.value });
         }
     };
-    
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -40,8 +63,6 @@ const FormAlquiler = () => {
             return;
         }
 
-
-        // Definir una función auxiliar para insertar el cliente en una base de datos
         const insertarAlquiler = (url, vehiculoData) => {
             return fetch(url, {
                 method: 'POST',
@@ -60,17 +81,18 @@ const FormAlquiler = () => {
 
 
         const datosAlquiler = {
-            idCliente: alquiler.idTipoVehiculo,
-            fechaEntrega: alquiler.idColor,
+            idCliente: alquiler.idCliente,
+            idVehiculo: idVehiculo,
+            fechaEntrega: alquiler.fechaEntrega,
             horaEntrega: alquiler.horaEntrega,
-            idSeguro: alquiler.idCombustible,
+            idSeguro: alquiler.idSeguro,
         };
 
         // Primero intentar insertar en SQL Server
-        insertarAlquiler('http://127.0.0.1:3001/vehiculos', datosAlquiler)
+        insertarAlquiler('http://127.0.0.1:3001/realizarAlquiler', datosAlquiler)
             .then(data => {
                 console.log('Alquiler agregado en SQL Server:', data);
-                alert('Alquiler agregado con éxito');
+                obtenerRecibo(data.idAlquiler);
                 resetForm();
             })
             .catch(error => {
@@ -79,13 +101,29 @@ const FormAlquiler = () => {
             });
     };
 
-
-
-
     const resetForm = () => {
         setAlquiler({ idCliente: '', fechaEntrega: '', horaEntrega: '', idSeguro: '' });
     };
 
+    const ReciboModal = () => (
+        showModal && (
+            <ModalContainer>
+                <ContainerRecibo>
+                    <h2>Recibo de Alquiler</h2>
+                    {recibo ? (
+                        <ul>
+                            <li>ID Alquiler: {recibo.idAlquiler}</li>
+                            <li>Cliente: {recibo.Cliente}</li>
+                            <li>Fecha Alquiler: {recibo.fechaAlquiler}</li>
+                            <li>Fecha Entrega: {recibo.fechaEntrega}</li>
+                            <li>Monto: ${recibo.monto}</li>
+                        </ul>
+                    ) : <p>Cargando recibo...</p>}
+                    <BotonCancelar onClick={() => setShowModal(false)}>Cerrar</BotonCancelar>
+                </ContainerRecibo>
+            </ModalContainer>
+        )
+    );
 
     return (
         <ContenedorTabla>
@@ -95,8 +133,8 @@ const FormAlquiler = () => {
                     <StyledLabel>Cliente:</StyledLabel>
                     <StyledInput
                         type="text"
-                        name="filtroCliente"
-                        placeholder="Buscar por cédula"
+                        name="filtroCedula"
+                        placeholder="Buscar por identificación"
                         value={filtroCedula}
                         onChange={handleChange}
 
@@ -142,9 +180,9 @@ const FormAlquiler = () => {
                     >
                         <option value="">Seleccione un Seguro</option>
                         {seguros
-                            .map(cliente => (
-                                <option key={cliente.idCliente} value={cliente.idCliente}>
-                                    {`${cliente.cedula} - ${cliente.nombreCliente} ${cliente.apellidoCliente}`}
+                            .map(seguro => (
+                                <option key={seguro.idSeguro} value={seguro.idSeguro}>
+                                    {`${seguro.tipoSeguro} - Monto: ${seguro.montoSeguro}$`}
                                 </option>
                             ))}
                     </StyledSelect>
@@ -154,14 +192,32 @@ const FormAlquiler = () => {
                     </ContenedorBotones>
                 </StyledForm>
             </FormContainer>
+            <ReciboModal />
         </ContenedorTabla>
     );
 };
 
 export default FormAlquiler;
 
+const ModalContainer = styled.div`
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.5); // Semi-transparente
+        z-index: 1000; // Asegura que esté por encima de otros elementos
+  
+    `;
+const ContainerRecibo = styled.div`
+    padding:10px;
+    background-color:white;
+    border-radius:25px;
 
-
+`;
 const ContenedorTabla = styled.div`
   padding:50px;
 

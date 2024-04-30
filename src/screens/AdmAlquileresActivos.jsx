@@ -5,6 +5,9 @@ import styled from 'styled-components';
 const AdmDetallesAlquiler = () => {
     const [alquileres, setAlquileres] = useState([]);
     const [error, setError] = useState(false);
+    const [clientes, setClientes] = useState([]);
+    const [vehiculos, setVehiculos] = useState([]);
+    const [seguros, setSeguros] = useState([]);
 
     const cargarAlquileres = () => {
         fetch('http://127.0.0.1:3001/alquiler')
@@ -22,18 +25,44 @@ const AdmDetallesAlquiler = () => {
                 console.error("Error al obtener los datos:", error);
             });
     };
+    const cargarClientes = () => {
+      fetch('http://127.0.0.1:3001/clientes')
+        .then(response => response.json())
+        .then(data => {
+          setClientes(data);
+        })
+        .catch(error => console.error("Error al obtener los datos:", error));
+    };
+    const cargarVehiculos = () => {
+      fetch('http://127.0.0.1:3001/vehiculos')
+        .then(response => response.json())
+        .then(data => {
+          setVehiculos(data);
+        })
+        .catch(error => console.error("Error al obtener los datos:", error));
+    };
+    const cargarSeguros = () => {
+      fetch('http://127.0.0.1:3001/seguros')
+        .then(response => response.json())
+        .then(data => {
+          setSeguros(data);
+        })
+        .catch(error => console.error("Error al obtener los datos:", error));
+    };
 
     useEffect(() => {
         cargarAlquileres();
+        cargarVehiculos();
+        cargarSeguros();
+        cargarClientes();
     }, []);
 
 
     return (
         <ContenedorTabla>
             <h1>Alquileres activos</h1>
-          
-
             {alquileres.length > 0 ? (
+             
                 <Table>
                     <thead>
                         <Tr>
@@ -41,21 +70,32 @@ const AdmDetallesAlquiler = () => {
                             <Th>Cliente</Th>
                             <Th>Fecha Alquiler</Th>
                             <Th>Fecha Entrega</Th>
-                            <Th>Vehiculo</Th>
-                            <Th>Empleado</Th>
+                            <Th>ID Vehiculo</Th>
+                            <Th>Seguro</Th>
+                            <Th>Monto</Th>
+                            <Th></Th>
                         </Tr>
                     </thead>
                     <tbody>
-                        {alquileres.map((alquiler) => (
-                            <Tr key={alquiler.idAlquiler}>
-                                <Td>{alquiler.idAlquiler}</Td>
-                                <Td>{alquiler.idCliente}</Td>
-                                <Td>{alquiler.fechaAlquiler}</Td>
-                                <Td>{alquiler.fechaEntrega}</Td>
-                                <Td>{alquiler.idVehiculo}</Td>
-                                <Td>{alquiler.idUsuario}</Td>
-                            </Tr>
-                        ))}
+                        {alquileres.map((alquiler) => {
+                            
+                            const cliente = clientes.find(c => c.id === alquiler.idCliente);
+                            const vehiculo = vehiculos.find(v => v.idVehiculo === alquiler.idVehiculo);
+                            const seguro = seguros.find(s => s.idSeguro === alquiler.idSeguro);
+
+                            return (
+                                <Tr key={alquiler.idAlquiler}>
+                                    <Td>{alquiler.idAlquiler}</Td>
+                                    <Td>{cliente ? `${cliente.identificacion} - ${cliente.nombre} ${cliente.apellidos}` : 'No disponible'}</Td>
+                                    <Td>{alquiler.fechaAlquiler}</Td>
+                                    <Td>{alquiler.fechaEntrega}</Td>
+                                    <Td>{vehiculo ? vehiculo.idVehiculo : 'No disponible'}</Td>
+                                    <Td>{seguro ? seguro.tipoSeguro : 'No disponible'}</Td>
+                                    <Td>{`${alquiler.monto}$`}</Td>
+                                    <Td><BotonDevolver>Devolver</BotonDevolver></Td>
+                                </Tr>
+                            );
+                        })}
                     </tbody>
                 </Table>
             ) : (
@@ -203,5 +243,13 @@ const BotonCancelar = styled(BotonAccion)`
 
   &:hover {
     background-color: #E55347; 
+  }
+`;
+const BotonDevolver = styled(BotonAccion)`
+  background-color: #8a0a6e; 
+  color: white;
+
+  &:hover {
+    opacity: 0.8;
   }
 `;
