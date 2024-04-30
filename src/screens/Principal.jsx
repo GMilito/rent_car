@@ -1,9 +1,13 @@
 import React from 'react'
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+
 import clientes from '../img/satisfaccion-del-consumidor.png';
 import vehiculos from '../img/vehiculos.png';
 import alquiler from '../img/clave.png';
 import catalogo from '../img/revista.png';
+
+
+
 import { Link } from 'react-router-dom';
 
 const Principal = () => {
@@ -12,7 +16,6 @@ const Principal = () => {
       <ContenedorTitulo>
         <TituloPrincipal>Bienvenido </TituloPrincipal>
       </ContenedorTitulo>
-
       <Seccion>
         <ImgPrincipal src={clientes} alt="" />
         <TextoSeccion>
@@ -81,7 +84,17 @@ const BotonNavegar = styled.button`
     opacity: 0.8;
   }
 `;
-
+const moveInRight = keyframes`
+0% {
+  transform: translateY(0); /* Comienza sin desplazamiento */
+}
+50% {
+  transform: translateY(-10px); /* Desplazamiento hacia arriba */
+}
+100% {
+  transform: translateY(0); /* Vuelve a la posición inicial */
+}
+`;
 const TituloSecundario = styled.h3`
   font-size: 1.8rem;
   font-weight: 400;
@@ -101,6 +114,7 @@ const ContenedorPrincipal = styled.div`
 const ContenedorTitulo = styled.div`
   display: flex;
   justify-content: center;
+  animation: ${moveInRight} 1s ease-out;
 `;
 
 const Seccion = styled.div`
@@ -112,6 +126,7 @@ const Seccion = styled.div`
 
 
 const TituloPrincipal = styled.h2`
+  margin-top: 80px;
   font-size: 2.5rem;
   font-weight: 500;
   font-family: 'Roboto', sans-serif;
